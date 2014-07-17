@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="virotest" default="jar" basedir=".">
+	<property file="${basedir}/build.properties" />
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Preparation and cleanups -->
+	<target name="prepare" depends="clean" description="--> Creates the build directories">
+		<mkdir dir="${deploy.dir}" />
+		<mkdir dir="${deploy.lib}" />
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${build.classes}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${dist.dir}/conf" />
+	</target>
+
+	<target name="clean" description="--> Removes temp generated files.">
+	    <delete dir="${deploy.dir}" />
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<!-- Compile the application -->
+	<target name="compile" depends="prepare" description="--> Compiles all source code.">
+		<javac srcdir="${src.dir}" destdir="${build.classes}" debug="${compile.debug}" target="1.7"
+			deprecation="${compile.deprecation}" optimize="${compile.optimize}" includeantruntime="false">
+			<classpath refid="classpath" />
+		</javac>
+		<copy todir="${build.classes}">
+			<fileset dir="${src.dir}" excludes="**/*.java"/>
+		</copy>
+	</target>
+
+	<target name="jar" depends="compile" description="--> Generates the runnable jar file in the 'build' directory.">
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${dist.dir}/virotest.jar" basedir="${build.classes}"></jar>
+		<copy todir="${deploy.lib}">
+			<fileset dir="${lib.dir}" includes="**/*"/>
+			<fileset dir="${dist.dir}" includes="virotest.jar"/>
+		</copy>
+		<copy todir="${dist.dir}">
+			<fileset dir="${bin.dir}" includes="**/*"/>
+		</copy>
+		<zip destfile="${dist.dir}/deploy.zip"
+       		basedir="${deploy.dir}"
+  		/>
+		<delete dir="${build.dir}" />
+	</target>
+	
+	<target name="transfer" depends="jar">
+		<copy file="${dist.dir}/virotest.jar" tofile="${adnetwork.env.SHARE_HOME}/virotest.jar"/>
+	</target>
+	
+</project>

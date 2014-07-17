@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="test"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value=" SELECT ?taxid ?nodeRank ?parentId ?nameclass ?taxname " />
+		<property name="whereClause"
+			value=" where {?s &lt;http://bds.csdb.cn/material/taxonomy/taxid> ?taxid. ?s &lt;http://bds.csdb.cn/material/taxonomy/nodeRank> ?nodeRank. ?s &lt;http://bds.csdb.cn/material/taxonomy/parentId> ?parentId. ?s &lt;http://bds.csdb.cn/material/taxonomy/name> ?nameEntry. ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/nameclass> ?nameclass. ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/taxname> ?taxname.}" />
+		<property name="limit" value="100" />
+		<property name="offset" value="0" />
+	</bean>
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+	</bean>
+
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor" >
+			<property name="conditions">
+			 <list></list>
+			</property>
+			</bean>
+		</property>
+		<property name="processors">
+			<list>
+				<ref bean="switch-processor" />
+				<ref bean="taxid-processor" />
+				<ref bean="nodeRank-processor" />
+				<ref bean="parentId-processor" />
+			</list>
+		</property>
+		<property name="postProcessor" ref="postProcessor" />
+	</bean>
+	<bean id="taxid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="taxid" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:label" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="nodeRank-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="nodeRank" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dwc:taxonRank" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="parentId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="parentId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dwc:parentNameUsageID" />
+				<property name="otype" value="uri"></property>
+				<property name="oprefix" value="taxon:" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
+		<property name="processors">
+			<list>
+				<ref bean="scientificName-combine-processor" />
+				<ref bean="acceptedName-combine-processor" />
+				<ref bean="vernacularName-combine-processor" />
+			</list>
+		</property>
+	</bean>
+	<bean id="scientificName-combine-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="nameclass" />
+					<property name="ofilter" value="scientific name" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="taxname" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dwc:scientificName" />
+				<property name="content" value="taxname.value" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="acceptedName-combine-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="nameclass" />
+					<property name="ofilter" value="authority" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="taxname" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dwc:acceptedNameUsage" />
+				<property name="content" value="taxname.value" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="vernacularName-combine-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="nameclass" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="taxname" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dwc:vernacularName" />
+				<property name="content" value="taxname.value" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
+		<property name="removeKeys">
+			<list>
+				<value>nameclass</value>
+				<value>taxname</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/taxonomynew/"></property>
+		<property name="sprefix" value="http://gcm.wfcc.info/taxonomy/"></property>
+		<property name="idname" value="rdfs:label"></property>
+		<property name="namespace">
+			<map>
+				<entry key="rdf">
+					<value>http://www.w3.org/1999/02/22-rdf-syntax-ns#</value>
+				</entry>
+				<entry key="rdfs">
+					<value>http://www.w3.org/2000/01/rdf-schema#</value>
+				</entry>
+				<entry key="owl">
+					<value>http://www.w3.org/2002/07/owl#</value>
+				</entry>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+				<entry key="obo">
+					<value>http://purl.obolibrary.org/obo/</value>
+				</entry>
+				<entry key="dwc">
+					<value>http://rs.tdwg.org/dwc/terms/</value>
+				</entry>
+				<entry key="gcm">
+					<value>http://gcm.wdcm.org/</value>
+				</entry>
+				<entry key="taxon">
+					<value>http://gcm.wfcc.info/taxonomy/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+</beans>
