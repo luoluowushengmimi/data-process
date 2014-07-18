@@ -211,7 +211,6 @@
 	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
 		<property name="removeKeys">
 			<list>
-				<value>dbXrefTxt</value> 
 			</list>
 		</property>
 	</bean>
