@@ -62,9 +62,9 @@
 			</map>
 		</property>
 	</bean>
-	<bean id="main-processor" class="cn.cnic.virostudio.processor.CompositeProcessor">
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
 		<property name="preProcessor">
-			<bean class="cn.cnic.virostudio.processor.PreProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor">
 			  <property name="conditions">
 			    <list>
 			      <ref bean="dbXrefTxt-filter-condition"/>
@@ -89,11 +89,10 @@
 	</bean>
 	<bean id="dbXrefTxt-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
 	   <property name="key" value="dbXrefTxt"></property>
-	   <property name="value" value="taxon,GeneID"></property>
-	   <property name="matchRule" value="start"></property>
+	   <property name="value" value="((^(taxon:)|(GeneID:))([a-zA-Z0-9])*)"></property>
 	</bean>
 	<bean id="definition-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="definition" />
@@ -107,7 +106,7 @@
 	</bean>
 
 	<bean id="strain-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="strain" />
@@ -121,7 +120,7 @@
 	</bean>
 
 	<bean id="db_xref-taxon-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="dbXrefTxt" />
@@ -137,7 +136,7 @@
 	</bean>
 
 	<bean id="db_xref-geneID-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="dbXrefTxt" />
@@ -153,7 +152,7 @@
 	</bean>
 
 	<bean id="projectId-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="projectId" />
@@ -168,7 +167,7 @@
 	</bean>
 
 	<bean id="bioprojectId-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="bioprojectId" />
@@ -183,7 +182,7 @@
 	</bean>
 
 	<bean id="locusId-processor"
-		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="locusId" />
@@ -196,7 +195,7 @@
 		</property>
 	</bean>
 
-	<bean id="keywords-processor" class="cn.cnic.virostudio.processor.SplitProcessor">
+	<bean id="keywords-processor" class="cn.cnic.virostudio.process.SplitProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="keywords" />
@@ -209,7 +208,7 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="postProcessor" class="cn.cnic.virostudio.processor.PostProcessor">
+	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
 		<property name="removeKeys">
 			<list>
 				<value>dbXrefTxt</value> 
