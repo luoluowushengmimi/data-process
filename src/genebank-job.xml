@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="selectClause"
+			value=" SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain " />
+		<property name="whereClause"
+			value=" where {?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbXrefTxt> ?dbXrefTxt.  ?s &lt;http://bds.csdb.cn/material/genbank/definition> ?definition. ?s &lt;http://bds.csdb.cn/material/genbank/keywords> ?keywords. optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}}" />
+		<property name="limit" value="100" />
+		<property name="offset" value="0" />
+	</bean>
+
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+	</bean>
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/taxonomynew/"/>
+		<property name="sprefix" value="http://gcm.wfcc.info/genome/" />
+		<property name="idname" value="rdfs:label"/>
+		<property name="namespace">
+			<map>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+				<entry key="rdf">
+					<value>http://www.w3.org/1999/02/22-rdf-syntax-ns#</value>
+				</entry>
+				<entry key="rdfs">
+					<value>http://www.w3.org/2000/01/rdf-schema#</value>
+				</entry>
+				<entry key="owl">
+					<value>http://www.w3.org/2002/07/owl#</value>
+				</entry>
+				<entry key="up">
+					<value>http://purl.uniprot.org/core/</value>
+				</entry>
+				<entry key="dwc">
+					<value>http://rs.tdwg.org/dwc/terms/</value>
+				</entry>
+				<entry key="GeneID">
+					<value>http://gcm.wfcc.info/gene/</value>
+				</entry>
+				<entry key="GCM">
+					<value>http://gcm.wdcm.org/gcm/</value>
+				</entry>
+				<entry key="taxon">
+					<value>http://gcm.wfcc.info/taxonomy/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="main-processor" class="cn.cnic.virostudio.processor.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.processor.PreProcessor">
+			  <property name="conditions">
+			    <list>
+			      <ref bean="dbXrefTxt-filter-condition"/>
+			    </list>
+			  </property>
+			</bean>
+		</property>
+		
+		<property name="processors">
+			<list>
+				<ref bean="definition-processor" />
+				<ref bean="keywords-processor" />
+				<ref bean="strain-processor" />
+				<ref bean="bioprojectId-processor" />
+				<ref bean="projectId-processor" />
+				<ref bean="locusId-processor" />
+				<ref bean="db_xref-taxon-processor" />
+				<ref bean="db_xref-geneID-processor" />
+			</list>
+		</property>
+		<property name="postProcessor" ref="postProcessor" />
+	</bean>
+	<bean id="dbXrefTxt-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
+	   <property name="key" value="dbXrefTxt"></property>
+	   <property name="value" value="taxon,GeneID"></property>
+	   <property name="matchRule" value="start"></property>
+	</bean>
+	<bean id="definition-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="definition" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:comment" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="strain-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="strain" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:tostrain" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="db_xref-taxon-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="dbXrefTxt" />
+				<property name="ofilter" value="taxon:" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="up:organism" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="db_xref-geneID-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="dbXrefTxt" />
+				<property name="ofilter" value="GeneID:" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:gene" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="projectId-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="projectId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:project" />
+				<property name="oprefix" value="Project:" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="bioprojectId-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="bioprojectId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:BioProject" />
+				<property name="oprefix" value="BioProject:" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="locusId-processor"
+		class="cn.cnic.virostudio.processor.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="locusId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:label" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="keywords-processor" class="cn.cnic.virostudio.processor.SplitProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="keywords" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:status" />
+				<property name="osplitTag" value=";" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="postProcessor" class="cn.cnic.virostudio.processor.PostProcessor">
+		<property name="removeKeys">
+			<list>
+				<value>dbXrefTxt</value> 
+			</list>
+		</property>
+	</bean>
+</beans>
