@@ -1,0 +1,41 @@
+ genbank query clause:
+ 
+ SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain 
+ where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
+ ?s <http://bds.csdb.cn/material/genbank/feature> ?feature. 
+ ?feature <http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. 
+?qualifier <http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. 
+ ?dbxref <http://bds.csdb.cn/material/genbank/dbXrefTxt> ?dbXrefTxt. 
+ ?s <http://bds.csdb.cn/material/genbank/definition> ?definition. 
+ ?s <http://bds.csdb.cn/material/genbank/keywords> ?keywords. 
+ optional{?s <http://bds.csdb.cn/material/genbank/dblink> ?dblink.} 
+ optional{?dblink <http://bds.csdb.cn/material/genbank/projectId> ?projectId.} 
+ optional{ ?dblink <http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} 
+optional{?qualifier <http://bds.csdb.cn/material/genbank/strain> ?strain.}} limit 100 offset 0
+
+处理好的数据查询：
+SELECT ?comment  ?organism ?gene ?project ?BioProject ?label ?status 
+where {
+optional{?s <http://www.w3.org/2000/01/rdf-schema#comment> ?comment.}
+optional{?s <http://purl.uniprot.org/core/organism> ?organism.}
+optional{?s <http://gcm.wdcm.org/gcm/gene> ?gene.}
+optional{?s <http://gcm.wdcm.org/gcm/project> ?project.}
+optional{?s <http://gcm.wdcm.org/gcm/BioProject> ?BioProject.}
+optional{?s <http://www.w3.org/2000/01/rdf-schema#label> ?label.}
+optional{?s <http://gcm.wdcm.org/gcm/status> ?status.}
+}
+			
+
+
+taxonomy
+query: 
+
+ SELECT distinct ?taxid ?nodeRank ?parentId ?nameclass ?taxname
+ where {
+ ?s &lt; http://bds.csdb.cn/material/taxonomy/taxid> ?taxid. 
+ ?s &lt;http://bds.csdb.cn/material/taxonomy/nodeRank> ?nodeRank. 
+ ?s &lt;http://bds.csdb.cn/material/taxonomy/parentId> ?parentId.
+ ?s &lt;http://bds.csdb.cn/material/taxonomy/name> ?nameEntry.
+ ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/nameclass> ?nameclass.
+ ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/taxname> ?taxname.
+ } limit 100 offset 0
