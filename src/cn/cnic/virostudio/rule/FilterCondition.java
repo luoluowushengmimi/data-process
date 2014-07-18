@@ -4,7 +4,6 @@ public class FilterCondition {
 	
 	private String key;
 	private String value;
-	private String matchRule;
 
 	public String getKey() {
 		return key;
@@ -22,12 +21,5 @@ public class FilterCondition {
 		this.value = value;
 	}
 
-	public String getMatchRule() {
-		return matchRule;
-	}
-
-	public void setMatchRule(String matchRule) {
-		this.matchRule = matchRule;
-	}
 
 }
