@@ -17,5 +17,4 @@ public class StartGenebank {
 		JobController job = context.getBean("job", JobController.class);
 		job.doListener();
 	}
-
 }
