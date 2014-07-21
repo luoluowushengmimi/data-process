@@ -80,10 +80,10 @@ public class DataWriterToFile implements DataWriter {
 		if (filePath.endsWith("/")) {
 			filePath = filePath.substring(0, filePath.length() - 1);
 		}
-		File file = new File(filePath + "/" + id);
+		File file = new File(filePath + "/" + id+".nt");
 		FileOutputStream fout;
 		try {
-			loginfo.info("创建文件： "+filePath + "/" + id);
+			loginfo.info("创建文件： "+filePath + "/" + id+".nt");
 			fout = new FileOutputStream(file, true);
 			RDFDataMgr.write(fout, model, RDFFormat.NT);
 			try {
