@@ -14,6 +14,9 @@
 	</bean>
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="test"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
 			value=" SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain " />
 		<property name="whereClause"
@@ -27,7 +30,7 @@
 		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
-		<property name="filePath" value="D:/taxonomynew/"/>
+		<property name="filePath" value="D:/genebank/"/>
 		<property name="sprefix" value="http://gcm.wfcc.info/genome/" />
 		<property name="idname" value="rdfs:label"/>
 		<property name="namespace">
