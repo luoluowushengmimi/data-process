@@ -22,7 +22,7 @@
 		<property name="whereClause"
 			value=" where {?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt.  ?s &lt;http://bds.csdb.cn/material/genbank/definition> ?definition. ?s &lt;http://bds.csdb.cn/material/genbank/keywords> ?keywords. optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}}" />
 		<property name="limit" value="100" />
-		<property name="offset" value="0" />
+		<property name="offset" value="1828900" />
 	</bean>
 
 
@@ -92,7 +92,7 @@
 	</bean>
 	<bean id="dbXrefTxt-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
 	   <property name="key" value="dbXrefTxt"></property>
-	   <property name="value" value="((^(taxon:)|(GeneID:))([a-zA-Z0-9])*)"></property>
+	   <property name="value" value="((^(taxon:)|(GeneID:))([a-zA-Z0-9,])*)"></property>
 	</bean>
 	<bean id="definition-processor"
 		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
