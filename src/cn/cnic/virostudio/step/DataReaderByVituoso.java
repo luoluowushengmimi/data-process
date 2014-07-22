@@ -106,7 +106,11 @@ public class DataReaderByVituoso implements DataReader {
 			while(iter.hasNext()){
 				String name=iter.next();
 				RDFNode node=result.get(name);
-				resultmap.put(name, node.toString());
+				String nodevalue=node.toString();
+				if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
+					nodevalue=nodevalue.substring(0, nodevalue.length()-1);
+				}
+				resultmap.put(name, nodevalue);
 			}
 			list.add(resultmap);
 		}
