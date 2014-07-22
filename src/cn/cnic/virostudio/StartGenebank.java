@@ -1,6 +1,5 @@
 package cn.cnic.virostudio;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import cn.cnic.virostudio.job.JobController;
 public class StartGenebank {
