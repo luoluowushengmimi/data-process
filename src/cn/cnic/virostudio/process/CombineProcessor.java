@@ -1,6 +1,10 @@
 package cn.cnic.virostudio.process;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import cn.cnic.virostudio.rule.FilterCondition;
 import cn.cnic.virostudio.rule.MatchRule;
 import cn.cnic.virostudio.rule.ModifyData;
 
@@ -65,10 +69,24 @@ public class CombineProcessor extends AbstractProcessor{
 			if(!input.containsKey(pname))
 				return false;
 			if (rule.ofilter != null && !rule.ofilter.isEmpty()) {
-			 return input.get(pname).iterator().next().startsWith(rule.ofilter);
+			// return input.get(pname).iterator().next().startsWith(rule.ofilter);
+			 String value=input.get(pname).iterator().next();
+			 Pattern pattern=Pattern.compile(rule.ofilter);
+			 Matcher matcher=pattern.matcher(value);
+			 return pattern.matches(rule.ofilter, value);
 			}
 		}
 		return true;
+	}
+	
+	public boolean isSave(Multimap<String, String> map,FilterCondition condition){
+		boolean tag=false;
+		String mapValue=map.get(condition.getKey()).iterator().next().trim();
+		String regEx=condition.getValue().trim();
+		Pattern pattern=Pattern.compile(regEx);
+		Matcher matcher=pattern.matcher(mapValue);
+		return pattern.matches(regEx, mapValue);
+		
 	}
 	
 }
