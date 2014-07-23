@@ -18,11 +18,11 @@
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
-			value=" SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain " />
+			value="SELECT distinct ?locusId ?seqMax ?seqMin ?locationTxt ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain " />
 		<property name="whereClause"
-			value=" where {?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt.  ?s &lt;http://bds.csdb.cn/material/genbank/definition> ?definition. ?s &lt;http://bds.csdb.cn/material/genbank/keywords> ?keywords. optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}}" />
-		<property name="limit" value="100" />
-		<property name="offset" value="1828900" />
+			value="where {?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?feature &lt;http://bds.csdb.cn/material/genbank/location> ?location. ?location &lt;http://bds.csdb.cn/material/genbank/seqMax> ?seqMax. ?location &lt;http://bds.csdb.cn/material/genbank/seqMin> ?seqMin. ?location &lt;http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. ?s &lt;http://bds.csdb.cn/material/genbank/definition> ?definition. ?s &lt;http://bds.csdb.cn/material/genbank/keywords> ?keywords. optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}}" />
+		<property name="limit" value="1000" />
+		<property name="offset" value="0" />
 	</bean>
 
 
@@ -86,6 +86,9 @@
 				<ref bean="locusId-processor" />
 				<ref bean="db_xref-taxon-processor" />
 				<ref bean="db_xref-geneID-processor" />
+				<ref bean="seqMax-processor"/>
+				<ref bean="seqMin-processor"/>
+				<ref bean="switch-processor"/>
 			</list>
 		</property>
 		<property name="postProcessor" ref="postProcessor" />
@@ -211,10 +214,84 @@
 			</bean>
 		</property>
 	</bean>
+	<bean id="seqMax-processor"
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="seqMax" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:genestart" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="seqMin-processor"
+		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="seqMin" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:geneend" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
+		<property name="processors">
+			<list>
+				<ref bean="dbXrefTxt-plus-processor" />
+				<ref bean="dbXrefTxt-reduce-processor" />
+			</list>
+		</property>
+	</bean>
+	<bean id="dbXrefTxt-reduce-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+		<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="locationTxt" />
+					<property name="ofilter" value="(^(complement))(.*)" />
+				</bean>
+			</list>
+			</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:geneorient" />
+				<property name="content" value="-"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="dbXrefTxt-plus-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+		<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="locationTxt" />
+					<property name="ofilter" value="(^(?!complement))(.)*" />
+				</bean>
+			</list>
+			</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:geneorient" />
+				<property name="content" value="+"></property>
+			</bean>
+		</property>
+	</bean>
 	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
 		<property name="removeKeys">
 			<list>
+			<value>locationTxt</value>
 			</list>
+		</property>
+		<property name="addproperties">
+		    <map>
+				<entry key="rdf:type">
+					<value>http://gcm.wfcc.info/genome/</value>
+				</entry>
+			</map>
 		</property>
 	</bean>
 </beans>
