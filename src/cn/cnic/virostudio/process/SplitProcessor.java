@@ -47,6 +47,7 @@ public class SplitProcessor extends AbstractProcessor {
 		for (String split_triple : split_triples) {
 			input.put(change.pnewName, "\""+split_triple.trim()+"\"");
 		}
+		input.removeAll(pname);
 		return input;
 	}
 
