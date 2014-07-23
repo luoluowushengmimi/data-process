@@ -7,7 +7,7 @@ import com.google.common.collect.Multimap;
 
 public class CompositeProcessor extends AbstractProcessor{
 	protected PreProcessor preProcessor;
-	protected PostProcessor postProcessor;
+	//protected PostProcessor postProcessor;
 	protected List<AbstractProcessor> processors = new ArrayList<>();
 	private static Logger logerr = Logger.getLogger("errLog");
 	private static Logger loginfo = Logger.getLogger("infoLog");
@@ -18,14 +18,6 @@ public class CompositeProcessor extends AbstractProcessor{
 
 	public void setPreProcessor(PreProcessor preProcessor) {
 		this.preProcessor = preProcessor;
-	}
-
-	public PostProcessor getPostProcessor() {
-		return postProcessor;
-	}
-
-	public void setPostProcessor(PostProcessor postProcessor) {
-		this.postProcessor = postProcessor;
 	}
 
 	public List<AbstractProcessor> getProcessors() {
@@ -50,7 +42,7 @@ public class CompositeProcessor extends AbstractProcessor{
 		for(AbstractProcessor processor : processors) {
 			result = processor.process(result);
 		}
-		return postProcessor.getMap(result);
+		return result;
 	}
 
 	@Override
