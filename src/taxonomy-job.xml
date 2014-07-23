@@ -43,9 +43,10 @@
 				<ref bean="taxid-processor" />
 				<ref bean="nodeRank-processor" />
 				<ref bean="parentId-processor" />
+				<ref bean="add-typeproperty-processor"/>
+				<ref bean="add-orientproperty-processor"/>
 			</list>
 		</property>
-		<property name="postProcessor" ref="postProcessor" />
 	</bean>
 	<bean id="taxid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
@@ -154,21 +155,6 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
-		<property name="removeKeys">
-			<list>
-				<value>nameclass</value>
-				<value>taxname</value>
-			</list>
-		</property>
-		<property name="addproperties">
-		    <map>
-				<entry key="rdf:type">
-					<value>http://gcm.wfcc.info/taxonomy/</value>
-				</entry>
-			</map>
-		</property>
-	</bean>
 
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/taxonomynew/"></property>
@@ -201,6 +187,33 @@
 					<value>http://gcm.wfcc.info/taxonomy/</value>
 				</entry>
 			</map>
+		</property>
+	</bean>
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="rdfs:label" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:oriented" />
+				<property name="oprefix" value="http://gcm.wfcc.info/taxonomy/" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+			  <property name="pname" value="" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdf:type" />
+				<property name="content" value="http://gcm.wfcc.info/taxonomy/" />
+			</bean>
 		</property>
 	</bean>
 </beans>
