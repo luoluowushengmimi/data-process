@@ -4,6 +4,11 @@ public class ModifyData {
 	public String pnewName = "";
 	public String oprefix = "";
 	public String osplitTag="";
+	/**
+	 * content 针对多对一的情况，这时候配置文件如下
+	 * <property name="content" value="taxname.value" />
+	 * 就是要明确得到的值是taxname这个key对应的value
+	 */
 	public String content="";
 	public String otype="";
 
