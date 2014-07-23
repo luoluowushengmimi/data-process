@@ -160,6 +160,13 @@
 				<value>taxname</value>
 			</list>
 		</property>
+		<property name="addproperties">
+		    <map>
+				<entry key="rdf:type">
+					<value>http://gcm.wfcc.info/taxonomy/</value>
+				</entry>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
