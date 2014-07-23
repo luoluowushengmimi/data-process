@@ -1,11 +1,15 @@
  genbank query clause:
  
- SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain 
+ SELECT distinct ?locusId ?seqMax ?seqMin ?locationTxt ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain 
  where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
  ?s <http://bds.csdb.cn/material/genbank/feature> ?feature. 
  ?feature <http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. 
-?qualifier <http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. 
- ?dbxref <http://bds.csdb.cn/material/genbank/dbXrefTxt> ?dbXrefTxt. 
+ ?feature <http://bds.csdb.cn/material/genbank/location> ?location.
+ ?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.
+ ?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.
+ ?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.
+?qualifier <http://bds.csdb.cn/material/genbank/dbxref> ?dbxref.
+ ?dbxref <http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. 
  ?s <http://bds.csdb.cn/material/genbank/definition> ?definition. 
  ?s <http://bds.csdb.cn/material/genbank/keywords> ?keywords. 
  optional{?s <http://bds.csdb.cn/material/genbank/dblink> ?dblink.} 
@@ -39,3 +43,23 @@ query:
  ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/nameclass> ?nameclass.
  ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/taxname> ?taxname.
  } limit 100 offset 0
+ 
+ 
+ 
+ 正则：
+     以scientific name开头的任意字符串
+        (^(scientific name))(.*)
+
+    以authority开头的任意字符串
+        (^(authority))(.*)
+         
+    不以scientific name开头和不以authority开头的任意字符串
+       (^(?!scientific name))(^(?!authority))(.)*
+       
+   不以complement开头
+       (^(?!complement))(.)*
+       
+   以complement开头
+   (^(complement))(.*)
+
+
