@@ -49,9 +49,17 @@ public class CombineProcessor extends AbstractProcessor{
 			value=change.getContent();
 		}
 		input.put(pnewname, this.constructObjectThroughOtype(value));
-		return input;
+		return this.deleteOrientedKeys(input);
+		//return input;
 	}
 	
+	public Multimap<String, String> deleteOrientedKeys(Multimap<String, String> input){
+		for(MatchRule rule:matchRules){
+			String pname = rule.getPname();
+			input.removeAll(pname);
+		}
+		return input;
+	}
 	public String constructObjectThroughOtype(String value){
 		if(change.getOtype().equalsIgnoreCase("uri")){
 			value=value;
