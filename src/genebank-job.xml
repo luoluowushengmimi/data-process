@@ -89,9 +89,10 @@
 				<ref bean="seqMax-processor"/>
 				<ref bean="seqMin-processor"/>
 				<ref bean="switch-processor"/>
+				<ref bean="add-typeproperty-processor"/>
+				<ref bean="add-orientproperty-processor"/>
 			</list>
 		</property>
-		<property name="postProcessor" ref="postProcessor" />
 	</bean>
 	<bean id="dbXrefTxt-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
 	   <property name="key" value="dbXrefTxt"></property>
@@ -280,10 +281,36 @@
 			</bean>
 		</property>
 	</bean>
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="rdfs:label" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:oriented" />
+				<property name="oprefix" value="http://gcm.wfcc.info/genome/" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+			  <property name="pname" value="" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdf:type" />
+				<property name="content" value="http://gcm.wfcc.info/genome/" />
+			</bean>
+		</property>
+	</bean>
 	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
 		<property name="removeKeys">
 			<list>
-			<value>locationTxt</value>
 			</list>
 		</property>
 		<property name="addproperties">
