@@ -308,17 +308,4 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
-		<property name="removeKeys">
-			<list>
-			</list>
-		</property>
-		<property name="addproperties">
-		    <map>
-				<entry key="rdf:type">
-					<value>http://gcm.wfcc.info/genome/</value>
-				</entry>
-			</map>
-		</property>
-	</bean>
 </beans>
