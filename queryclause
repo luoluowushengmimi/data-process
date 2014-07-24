@@ -1,13 +1,9 @@
  genbank query clause:
  
- SELECT distinct ?locusId ?seqMax ?seqMin ?locationTxt ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain 
+ SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain 
  where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
  ?s <http://bds.csdb.cn/material/genbank/feature> ?feature. 
  ?feature <http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. 
- ?feature <http://bds.csdb.cn/material/genbank/location> ?location.
- ?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.
- ?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.
- ?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.
 ?qualifier <http://bds.csdb.cn/material/genbank/dbxref> ?dbxref.
  ?dbxref <http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. 
  ?s <http://bds.csdb.cn/material/genbank/definition> ?definition. 
@@ -44,8 +40,18 @@ query:
  ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/taxname> ?taxname.
  } limit 100 offset 0
  
+ 处理基因的时候需要做两次查询，第一次需要先查询genome数据
  
+ gene query clause:
  
+ SELECT distinct ?locusId ?seqMax ?seqMin ?locationTxt 
+ where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
+ ?s <http://bds.csdb.cn/material/genbank/feature> ?feature. 
+ ?feature <http://bds.csdb.cn/material/genbank/location> ?location.
+ ?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.
+ ?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.
+ ?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.
+} limit 100 offset 0
  正则：
      以scientific name开头的任意字符串
         (^(scientific name))(.*)
