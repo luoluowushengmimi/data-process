@@ -29,7 +29,6 @@ public class AddPropertyProcessor extends AbstractProcessor{
 	public Multimap<String, String> process(Multimap<String, String> input) {
 		
 		String pname = matchRule.getPname().trim();
-		System.out.println(pname);
 		if (pname != null && pname != "") {
 			if (change.otype.equalsIgnoreCase("uri")) {
 				input.put(change.pnewName, change.oprefix
