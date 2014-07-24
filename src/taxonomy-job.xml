@@ -189,7 +189,7 @@
 			</map>
 		</property>
 	</bean>
-	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="rdfs:label" />
@@ -197,13 +197,13 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:oriented" />
-				<property name="oprefix" value="http://gcm.wfcc.info/type/taxonomy" />
+				<property name="pnewName" value="dc:source" />
+				<property name="oprefix" value="http://bds.csdb.cn/material/taxonomy/" />
 				<property name="otype" value="uri" />
 			</bean>
 		</property>
 	</bean>
-	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 			  <property name="pname" value="" />
@@ -212,7 +212,7 @@
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
-				<property name="content" value="http://bds.csdb.cn/material/taxonomy/" />
+				<property name="content" value="http://gcm.wfcc.info/type/taxonomy/" />
 			</bean>
 		</property>
 	</bean>
