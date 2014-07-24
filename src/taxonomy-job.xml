@@ -180,7 +180,7 @@
 				<entry key="dwc">
 					<value>http://rs.tdwg.org/dwc/terms/</value>
 				</entry>
-				<entry key="gcm">
+				<entry key="GCM">
 					<value>http://gcm.wdcm.org/</value>
 				</entry>
 				<entry key="taxon">
@@ -198,7 +198,7 @@
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:oriented" />
-				<property name="oprefix" value="http://gcm.wfcc.info/taxonomy/" />
+				<property name="oprefix" value="http://gcm.wfcc.info/type/taxonomy" />
 				<property name="otype" value="uri" />
 			</bean>
 		</property>
@@ -212,7 +212,7 @@
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
-				<property name="content" value="http://gcm.wfcc.info/taxonomy/" />
+				<property name="content" value="http://bds.csdb.cn/material/taxonomy/" />
 			</bean>
 		</property>
 	</bean>
