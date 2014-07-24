@@ -43,9 +43,10 @@
 				<ref bean="taxid-processor" />
 				<ref bean="nodeRank-processor" />
 				<ref bean="parentId-processor" />
+				<ref bean="add-typeproperty-processor"/>
+				<ref bean="add-orientproperty-processor"/>
 			</list>
 		</property>
-		<property name="postProcessor" ref="postProcessor" />
 	</bean>
 	<bean id="taxid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
@@ -102,7 +103,7 @@
 			<list>
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="nameclass" />
-					<property name="ofilter" value="scientific name" />
+					<property name="ofilter" value="(^(scientific name))(.*)" />
 				</bean>
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="taxname" />
@@ -121,7 +122,7 @@
 			<list>
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="nameclass" />
-					<property name="ofilter" value="authority" />
+					<property name="ofilter" value="(^(authority))(.*)" />
 				</bean>
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="taxname" />
@@ -140,6 +141,7 @@
 			<list>
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="nameclass" />
+					<property name="ofilter" value="(^(?!scientific name))(^(?!authority))(.)*" />
 				</bean>
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="taxname" />
@@ -151,14 +153,6 @@
 				<property name="pnewName" value="dwc:vernacularName" />
 				<property name="content" value="taxname.value" />
 			</bean>
-		</property>
-	</bean>
-	<bean id="postProcessor" class="cn.cnic.virostudio.process.PostProcessor">
-		<property name="removeKeys">
-			<list>
-				<value>nameclass</value>
-				<value>taxname</value>
-			</list>
 		</property>
 	</bean>
 
@@ -193,6 +187,33 @@
 					<value>http://gcm.wfcc.info/taxonomy/</value>
 				</entry>
 			</map>
+		</property>
+	</bean>
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="rdfs:label" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:oriented" />
+				<property name="oprefix" value="http://gcm.wfcc.info/taxonomy/" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+			  <property name="pname" value="" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdf:type" />
+				<property name="content" value="http://gcm.wfcc.info/taxonomy/" />
+			</bean>
 		</property>
 	</bean>
 </beans>

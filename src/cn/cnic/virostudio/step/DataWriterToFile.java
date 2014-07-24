@@ -126,6 +126,12 @@ public class DataWriterToFile implements DataWriter {
 		String[] couples = value.split(":");
 		String prefix = couples[0];
 		String content = couples[1];
+		System.out.println(prefix);
+		if (prefix.startsWith("http") || prefix.startsWith("HTTP")
+				|| prefix.startsWith("https") || prefix.startsWith("HTTPS")) {
+			resource = model.createResource(value);
+			return resource;
+		}
 		if (!namespace.containsKey(prefix))
 			throw new NullPointerException();
 		String oprefix = namespace.get(prefix);

@@ -12,8 +12,8 @@ public class ProcessTest {
 
 	public static void main(String[] args) throws Exception {
 		ProcessTest test=new ProcessTest();
-		test.taxonomyTest();
-		//test.genebankTest();
+		//test.taxonomyTest();
+		test.genebankTest();
 	}
 
 	public void genebankTest() {
