@@ -86,9 +86,6 @@
 				<ref bean="locusId-processor" />
 				<ref bean="db_xref-taxon-processor" />
 				<ref bean="db_xref-geneID-processor" />
-				<ref bean="seqMax-processor"/>
-				<ref bean="seqMin-processor"/>
-				<ref bean="switch-processor"/>
 				<ref bean="add-typeproperty-processor"/>
 				<ref bean="add-orientproperty-processor"/>
 			</list>
@@ -212,72 +209,6 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:status" />
 				<property name="osplitTag" value=";" />
-			</bean>
-		</property>
-	</bean>
-	<bean id="seqMax-processor"
-		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
-		<property name="matchRule">
-			<bean class="cn.cnic.virostudio.rule.MatchRule">
-				<property name="pname" value="seqMax" />
-			</bean>
-		</property>
-		<property name="change">
-			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:genestart" />
-			</bean>
-		</property>
-	</bean>
-	<bean id="seqMin-processor"
-		class="cn.cnic.virostudio.process.PropertyRenameProcessor">
-		<property name="matchRule">
-			<bean class="cn.cnic.virostudio.rule.MatchRule">
-				<property name="pname" value="seqMin" />
-			</bean>
-		</property>
-		<property name="change">
-			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:geneend" />
-			</bean>
-		</property>
-	</bean>
-	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
-		<property name="processors">
-			<list>
-				<ref bean="dbXrefTxt-plus-processor" />
-				<ref bean="dbXrefTxt-reduce-processor" />
-			</list>
-		</property>
-	</bean>
-	<bean id="dbXrefTxt-reduce-processor" class="cn.cnic.virostudio.process.CombineProcessor">
-		<property name="matchRules">
-		<list>
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="locationTxt" />
-					<property name="ofilter" value="(^(complement))(.*)" />
-				</bean>
-			</list>
-			</property>
-		<property name="change">
-			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:geneorient" />
-				<property name="content" value="-"></property>
-			</bean>
-		</property>
-	</bean>
-	<bean id="dbXrefTxt-plus-processor" class="cn.cnic.virostudio.process.CombineProcessor">
-		<property name="matchRules">
-		<list>
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="locationTxt" />
-					<property name="ofilter" value="(^(?!complement))(.)*" />
-				</bean>
-			</list>
-			</property>
-		<property name="change">
-			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:geneorient" />
-				<property name="content" value="+"></property>
 			</bean>
 		</property>
 	</bean>
