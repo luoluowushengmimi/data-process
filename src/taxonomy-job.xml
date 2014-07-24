@@ -15,7 +15,7 @@
 
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
-		<property name="dataBase" value="test"></property>
+		<property name="dataBase" value="material"></property>
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
