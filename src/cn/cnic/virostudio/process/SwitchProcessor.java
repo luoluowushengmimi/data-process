@@ -7,7 +7,6 @@ import com.google.common.collect.Multimap;
 public class SwitchProcessor extends AbstractProcessor{
 
 	protected PreProcessor preProcessor;
-	protected PostProcessor postProcessor;
 	protected List<AbstractProcessor> processors = new ArrayList<>();
 
 	public List<AbstractProcessor> getProcessors() {
@@ -26,13 +25,6 @@ public class SwitchProcessor extends AbstractProcessor{
 		this.preProcessor = preProcessor;
 	}
 
-	public PostProcessor getPostProcessor() {
-		return postProcessor;
-	}
-
-	public void setPostProcessor(PostProcessor postProcessor) {
-		this.postProcessor = postProcessor;
-	}
 
 	/**
 	 * 顺序处理所有单元
