@@ -11,10 +11,5 @@ public class StartGene {
 		JobController job = context.getBean("job", JobController.class);
 		job.doListener();
 		context.close();
-//		ClassPathXmlApplicationContext contextnew = new ClassPathXmlApplicationContext(
-//				new String[] { "gene-job2.xml" });
-//		JobController job2 = context2.getBean("job", JobController.class);
-//		job2.doListener();
-//		context2.close();
 	}
 }
