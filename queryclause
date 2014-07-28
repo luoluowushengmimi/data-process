@@ -1,5 +1,5 @@
  genbank query clause:
- 
+ 6020000
  SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain 
  where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
  ?s <http://bds.csdb.cn/material/genbank/feature> ?feature. 
@@ -28,6 +28,7 @@ optional{?s <http://gcm.wdcm.org/gcm/status> ?status.}
 
 
 taxonomy
+ 1720000
 query: 
 
  SELECT distinct ?taxid ?nodeRank ?parentId ?nameclass ?taxname
@@ -44,14 +45,33 @@ query:
  
  gene query clause:
  
- SELECT distinct ?locusId ?seqMax ?seqMin ?locationTxt 
+ 第一个query：
+ 
+ SELECT distinct ?locusId ?featureTagName dbXrefTxt ?locus_tag ?seqMax ?seqMin ?locationTxt 
  where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
- ?s <http://bds.csdb.cn/material/genbank/feature> ?feature. 
+ ?s <http://bds.csdb.cn/material/genbank/feature> ?feature.
  ?feature <http://bds.csdb.cn/material/genbank/location> ?location.
+  ?feature <http://bds.csdb.cn/material/genbank/qualifier> ?qualifier.
+  ?feature <http://bds.csdb.cn/material/genbank/featureTagName> ?featureTagName.
+  ?qualifier <http://bds.csdb.cn/material/genbank/dbxref> ?dbxref.
+ ?dbxref <http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. 
+  ?qualifier <http://bds.csdb.cn/material/genbank/locus_tag> ?locus_tag.
  ?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.
  ?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.
  ?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.
 } limit 100 offset 0
+
+第二个query：
+
+SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType 
+ where {?s <http://bds.csdb.cn/material/gene/geneId> ?geneId. 
+ ?s <http://bds.csdb.cn/material/gene/taxonSource> ?taxonSource. 
+ ?s <http://bds.csdb.cn/material/gene/symbol> ?symbol. 
+ ?s <http://bds.csdb.cn/material/gene/description> ?description.
+ ?s <http://bds.csdb.cn/material/gene/geneType> ?geneType.
+} limit 100 offset 0
+
+
  正则：
      以scientific name开头的任意字符串
         (^(scientific name))(.*)
