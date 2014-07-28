@@ -25,6 +25,7 @@ public class DataWriterToFile implements DataWriter {
 	private String filePath;
 	private String sprefix;
 	private String idname;
+	private String ignorekey;
 	private HashMap<String, String> namespace;
 	private static Logger logerr = Logger.getLogger("errLog");
 	private static Logger loginfo = Logger.getLogger("infoLog");
@@ -63,6 +64,15 @@ public class DataWriterToFile implements DataWriter {
 		return idname;
 	}
 
+	public String getIgnorekey() {
+		return ignorekey;
+	}
+
+	public void setIgnorekey(String ignorekey) {
+		this.ignorekey = ignorekey;
+	}
+
+	
 	
 	/**
 	 * 
@@ -70,6 +80,7 @@ public class DataWriterToFile implements DataWriter {
 	 *            将一个读取结果的数据处理以后放入一个文件里
 	 */
 	public void write(String id,Multimap<String, String> map) {
+		map=this.ignore(map);
 		id=id.replaceAll("\"", "");
 		Model model = this.constructFileContent(id, map);
 		File directory = new File(filePath);
@@ -98,6 +109,20 @@ public class DataWriterToFile implements DataWriter {
 
 	}
 
+	/**
+	 * 
+	 * 
+	 * @param map
+	 * @return
+	 */
+	public Multimap<String, String> ignore(Multimap<String, String> map){
+		if(ignorekey==null||ignorekey==""){
+			return map;
+		}
+		else{map.removeAll(ignorekey);
+		}
+		return map;
+	}
 	public Model constructFileContent(String id,
 			Multimap<String, String> map) {
 		Model model = this.createModel();
