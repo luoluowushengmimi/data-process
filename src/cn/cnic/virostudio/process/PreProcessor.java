@@ -40,8 +40,8 @@ public class PreProcessor {
 			//info.info("condition:" +condition.getKey()+ " "+condition.getValue()+" "+condition.getMatchRule());
 			boolean temp=this.isSave(map, condition);
 			tag=tag&&temp;
-			loginfo.info("map" +map +"是否保留用作处理数据：" +tag);
 		}
+		loginfo.info("map" +map +"是否保留用作处理数据：" +tag);
 		return tag;
 	}
 	/**
