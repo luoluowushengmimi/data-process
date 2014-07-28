@@ -67,7 +67,7 @@ public class ProcessTest {
 	
 	public void geneTest(){
 		ApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "gene-job.xml" });
+				new String[] { "gene-job1.xml" });
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
 		resultmap.put("locusId", "NC_000870");
 		resultmap.put("locus_tag", "ToYLCTvsBgp1");
@@ -80,20 +80,17 @@ public class ProcessTest {
 		CompositeProcessor processor = context.getBean("main-processor",CompositeProcessor.class);
 		Multimap<String, String> processmap=processor.process(resultmap);
 		System.out.println("after process " + processmap);
-//			if(processmap==null) return;
-//			String id=processmap.get("dbXrefTxt").iterator().next();
-//			if(id==null) {
-//				throw new RuntimeException();
-//				}
-//			dataWriter=new DataWriterToFile();
-//			dataWriter.setFilePath("D:/gene/");
-//			dataWriter.setSprefix("http://gcm.wfcc.info/gene/");
-//			dataWriter.setIgnorekey("dbXrefTxt");
-//			HashMap<String, String> namespace=new HashMap<String, String>();
-//			namespace.put("dc", "http://purl.org/dc/elements/1.1/");
-//			namespace.put("rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
-//			namespace.put("GCM", "http://gcm.wdcm.org/gcm/");
-//			dataWriter.setNamespace(namespace);
-//			dataWriter.write(id, processmap);
+		ApplicationContext context2 = new ClassPathXmlApplicationContext(
+				new String[] { "gene-job2.xml" });
+		Multimap<String, String> resultmap2 = ArrayListMultimap.create();
+		resultmap2.put("geneId", "1010183");
+		resultmap2.put("taxonSource", "http://bds.csdb.cn/material/taxonomy/1140");
+		resultmap2.put("symbol", "anL02");
+		resultmap2.put("description", "putative replication-associated protein");
+		resultmap2.put("geneType", "protein-coding");
+		System.out.println("before process " + resultmap2);
+		CompositeProcessor processor2 = context2.getBean("main-processor",CompositeProcessor.class);
+		System.out.println("after process " + processor2.process(resultmap2));
+		
 	}
 }
