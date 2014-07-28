@@ -179,25 +179,5 @@ public class DataWriterToFile implements DataWriter {
 		model.setNsPrefixes(namespace);
 		return model;
 	}
-	
-//public static void main(String[] args) {
-//	Multimap<String, String> result = ArrayListMultimap.create();
-//	HashMap<String, String> namespace =new HashMap<String, String> ();
-//	namespace.put("dwc", "http://rs.tdwg.org/dwc/terms/");
-//	namespace.put("rdfs", "http://www.w3.org/2000/01/rdf-schema#");
-//	namespace.put("taxon", "http://gcm.wfcc.info/taxonomy/");
-//	result.put("rdfs:label", "\""+"106003"+"\"");
-//	result.put("dwc:parentNameUsageID", "taxon:231509");
-//	result.put("dwc:taxonRank", "\""+"species"+"\"");
-//	result.put("dwc:scientificName", "\""+"Rhodotorula buffonii"+"\"");
-//	loginfo.info(result);
-//	DataWriterToFile ww=new DataWriterToFile();
-//	ww.setNamespace(namespace);
-//	ww.setFilePath("D:/taxonomy/");
-//	ww.setSprefix("http://gcm.wfcc.info/taxonomy/");
-//	ww.setIdname("");
-//	ww.write("1", result);
-//}
-
 
 }
