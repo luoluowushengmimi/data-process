@@ -67,7 +67,7 @@ public class ProcessTest {
 	
 	public void geneTest(){
 		ApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "gene-job1.xml" });
+				new String[] { "gene-job-one.xml" });
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
 		resultmap.put("locusId", "NC_000870");
 		resultmap.put("locus_tag", "ToYLCTvsBgp1");
@@ -81,7 +81,7 @@ public class ProcessTest {
 		Multimap<String, String> processmap=processor.process(resultmap);
 		System.out.println("after process " + processmap);
 		ApplicationContext context2 = new ClassPathXmlApplicationContext(
-				new String[] { "gene-job2.xml" });
+				new String[] { "gene-job-two.xml" });
 		Multimap<String, String> resultmap2 = ArrayListMultimap.create();
 		resultmap2.put("geneId", "1010183");
 		resultmap2.put("taxonSource", "http://bds.csdb.cn/material/taxonomy/1140");
