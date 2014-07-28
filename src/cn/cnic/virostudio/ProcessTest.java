@@ -13,7 +13,8 @@ public class ProcessTest {
 	public static void main(String[] args) throws Exception {
 		ProcessTest test=new ProcessTest();
 		//test.taxonomyTest();
-		test.genebankTest();
+		//test.genebankTest();
+		test.geneTest();
 	}
 
 	public void genebankTest() {
@@ -57,5 +58,23 @@ public class ProcessTest {
 		System.out.println("afer process " + processor.process(resultmap));
 	}
 
+	
+	public void geneTest(){
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				new String[] { "gene-job.xml" });
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		resultmap.put("locusId", "NC_000870");
+		resultmap.put("locus_tag", "gcm:locustag");
+		resultmap.put("seqMax", "1062");
+		resultmap.put("seqMin", "346");
+		resultmap.put("locationTxt", "346..1062");
+		resultmap.put("featureTagName", "gene");
+		resultmap.put("dbXrefTxt", "GeneID:2046");
+		System.out.println("before process " + resultmap);
+		CompositeProcessor processor = context.getBean("main-processor",
+				CompositeProcessor.class);
+		System.out.println("afer process " + processor.process(resultmap));
+	}
+	
 
 }
