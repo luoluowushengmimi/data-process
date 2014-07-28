@@ -90,6 +90,14 @@
 				<ref bean="add-orientproperty-processor"/>
 			</list>
 		</property>
+		<property name="postProcessor">
+		   <bean class="cn.cnic.virostudio.process.PostProcessor">
+			  <property name="removeKeys">
+			    <list>
+			    </list>
+			  </property>
+			</bean>
+		</property>
 	</bean>
 	<bean id="dbXrefTxt-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
 	   <property name="key" value="dbXrefTxt"></property>
