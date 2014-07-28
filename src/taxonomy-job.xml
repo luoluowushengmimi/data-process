@@ -47,6 +47,14 @@
 				<ref bean="add-orientproperty-processor"/>
 			</list>
 		</property>
+		<property name="postProcessor">
+		   <bean class="cn.cnic.virostudio.process.PostProcessor">
+			  <property name="removeKeys">
+			    <list>
+			    </list>
+			  </property>
+			</bean>
+		</property>
 	</bean>
 	<bean id="taxid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
