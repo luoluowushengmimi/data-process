@@ -4,6 +4,7 @@ public class ModifyData {
 	public String pnewName = "";
 	public String oprefix = "";
 	public String osplitTag="";
+	public String otrim="";
 	/**
 	 * content 针对多对一的情况，这时候配置文件如下
 	 * <property name="content" value="taxname.value" />
@@ -54,6 +55,13 @@ public class ModifyData {
 	public void setOtype(String otype) {
 		this.otype = otype;
 	}
-	
+
+	public String getOtrim() {
+		return otrim;
+	}
+
+	public void setOtrim(String otrim) {
+		this.otrim = otrim;
+	}
 	
 }
