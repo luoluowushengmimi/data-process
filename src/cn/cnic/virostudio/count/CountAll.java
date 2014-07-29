@@ -108,7 +108,7 @@ public class CountAll {
 	public static void main(String[] args) {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "count-job.xml"});
-		CountAll count = context.getBean("datareadergene", CountAll.class);
+		CountAll count = context.getBean("datareader", CountAll.class);
 		loginfo.info(count.getQueryResult());
 		context.close();
 	}
