@@ -22,7 +22,7 @@
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. ?s &lt;http://bds.csdb.cn/material/genbank/definition> ?definition. ?s &lt;http://bds.csdb.cn/material/genbank/keywords> ?keywords. optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}} "/>
 		<property name="limit" value="10000" />
-		<property name="offset" value="0" />
+		<property name="offset" value="6030000" />
 	</bean>
 
 
