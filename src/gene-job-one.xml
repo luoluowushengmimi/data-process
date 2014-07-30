@@ -172,14 +172,12 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="dbXrefTxt-reduce-processor" class="cn.cnic.virostudio.process.CombineProcessor">
-		<property name="matchRules">
-			<list>
+	<bean id="dbXrefTxt-reduce-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="locationTxt" />
 					<property name="ofilter" value="(^(complement))(.*)" />
 				</bean>
-			</list>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
@@ -188,14 +186,12 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="dbXrefTxt-plus-processor" class="cn.cnic.virostudio.process.CombineProcessor">
-		<property name="matchRules">
-			<list>
+	<bean id="dbXrefTxt-plus-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
 					<property name="pname" value="locationTxt" />
 					<property name="ofilter" value="(^(?!complement))(.)*" />
 				</bean>
-			</list>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
