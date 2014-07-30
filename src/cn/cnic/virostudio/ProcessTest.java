@@ -31,9 +31,6 @@ public class ProcessTest {
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
 		resultmap.put("locusId", "NZ_AAFL01000001");
 		resultmap.put("dbXrefTxt", "taxon:306254");
-		resultmap.put("seqMax", "380315");
-		resultmap.put("seqMin", "379860");
-		resultmap.put("locationTxt", "3204533..3204904");
 		resultmap
 				.put("definition",
 						"Campylobacter coli RM2228 cont202, whole genome shotgun sequence");
