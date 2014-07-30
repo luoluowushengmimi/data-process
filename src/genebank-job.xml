@@ -136,7 +136,7 @@
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="dbXrefTxt" />
-				<property name="ofilter" value="taxon:" />
+				<property name="ofilter" value="(^(taxon:))(.*)" />
 			</bean>
 		</property>
 		<property name="change">
@@ -152,7 +152,7 @@
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
 				<property name="pname" value="dbXrefTxt" />
-				<property name="ofilter" value="GeneID:" />
+				<property name="ofilter" value="(^(GeneID:))(.*)" />
 			</bean>
 		</property>
 		<property name="change">
