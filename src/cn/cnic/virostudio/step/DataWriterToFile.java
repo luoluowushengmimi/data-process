@@ -71,15 +71,15 @@ public class DataWriterToFile implements DataWriter {
 	public void setIgnorekey(String ignorekey) {
 		this.ignorekey = ignorekey;
 	}
-
 	
+
 	
 	/**
 	 * 
 	 * @param map
 	 *            将一个读取结果的数据处理以后放入一个文件里
 	 */
-	public void write(String id,Multimap<String, String> map) {
+	public void write(int fileId,String id,Multimap<String, String> map) {
 		map=this.ignore(map);
 		id=id.replaceAll("\"", "");
 		Model model = this.constructFileContent(id, map);
@@ -91,10 +91,10 @@ public class DataWriterToFile implements DataWriter {
 		if (filePath.endsWith("/")) {
 			filePath = filePath.substring(0, filePath.length() - 1);
 		}
-		File file = new File(filePath + "/" + id+".nt");
+		File file = new File(filePath + "/" + fileId+".nt");
 		FileOutputStream fout;
 		try {
-			loginfo.info("创建文件： "+filePath + "/" + id+".nt");
+			loginfo.info("创建文件： "+filePath + "/" + fileId+".nt");
 			fout = new FileOutputStream(file, true);
 			RDFDataMgr.write(fout, model, RDFFormat.NT);
 			try {
@@ -104,7 +104,7 @@ public class DataWriterToFile implements DataWriter {
 				e.printStackTrace();
 			}
 		} catch (FileNotFoundException e) {
-			logerr.error("写入文件： "+filePath + "/" + id+"  失败！"+e.getMessage());
+			logerr.error("写入文件： "+filePath + "/" + fileId+"  失败！"+e.getMessage());
 		}
 
 	}

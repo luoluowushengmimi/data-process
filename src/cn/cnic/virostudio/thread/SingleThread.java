@@ -7,6 +7,7 @@ import cn.cnic.virostudio.step.DataWriter;
 import com.google.common.collect.Multimap;
 
 public class SingleThread {
+	private int fileId;
 	private String idname ;
 	private Multimap<String, String> map;
 	private CompositeProcessor processor;
@@ -15,9 +16,10 @@ public class SingleThread {
 	private static Logger loginfo = Logger.getLogger("infoLog");
 
 	
-	public SingleThread(String idname, Multimap<String, String> map,
+	public SingleThread(int fileId,String idname, Multimap<String, String> map,
 			CompositeProcessor processor, DataWriter dataWriter) {
 		super();
+		this.fileId=fileId;
 		this.idname = idname;
 		this.map = map;
 		this.processor = processor;
@@ -58,7 +60,7 @@ public class SingleThread {
 			logerr.error("id: "+id +"不存在！");
 			throw new RuntimeException();
 			}
-		dataWriter.write(id, processmap);
+		dataWriter.write(fileId,id, processmap);
 	}
 	
 

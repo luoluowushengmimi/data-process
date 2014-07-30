@@ -41,12 +41,13 @@ public class Step {
 	public void setDataWriter(DataWriter dataWriter) {
 		this.dataWriter = dataWriter;
 	}
-	public int  doStep() {
+	public int  doStep(int filenumber) {
 		int count=0;
 		List<Multimap<String,String>> result = dataReader.getQueryResult();
 		for(int i=0;i<result.size();i++){
 			count++;
-			new SingleThread(dataWriter.getIdname(),result.get(i),processor,dataWriter).run();
+			//new SingleThread(dataWriter.getIdname(),result.get(i),processor,dataWriter).run();
+			new SingleThread(filenumber,dataWriter.getIdname(),result.get(i),processor,dataWriter).run();
 		}
 			return count;
 	}
