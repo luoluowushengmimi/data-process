@@ -2,6 +2,9 @@ package cn.cnic.virostudio.process;
 
 
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import cn.cnic.virostudio.rule.MatchRule;
 import cn.cnic.virostudio.rule.ModifyData;
 import com.google.common.collect.Multimap;
@@ -53,7 +56,11 @@ public class PropertyRenameProcessor extends AbstractProcessor {
 			return false;
 		
 		if (matchRule.ofilter != null && !matchRule.ofilter.isEmpty()) {
-		 return input.get(pname).iterator().next().startsWith(matchRule.ofilter);
+			String value=input.get(pname).iterator().next();
+			 Pattern pattern=Pattern.compile(matchRule.ofilter);
+			 Matcher matcher=pattern.matcher(value);
+			 return pattern.matches(matchRule.ofilter, value);
+		 //return input.get(pname).iterator().next().startsWith(matchRule.ofilter);
 		}
 		return true;
 	}
