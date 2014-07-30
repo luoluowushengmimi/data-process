@@ -1,5 +1,6 @@
 package cn.cnic.virostudio.job;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,8 +13,9 @@ import cn.cnic.virostudio.thread.SingleThread;
 
 /**
  * 配置资源的类
+ * 
  * @author Administrator
- *
+ * 
  */
 public class Step {
 	private DataReader dataReader;
@@ -21,34 +23,51 @@ public class Step {
 	private DataWriter dataWriter;
 	private static Logger logerr = Logger.getLogger("errLog");
 	private static Logger loginfo = Logger.getLogger("infoLog");
+
 	public DataReader getDataReader() {
 		return dataReader;
 	}
+
 	public void setDataReader(DataReader dataReader) {
 		this.dataReader = dataReader;
 	}
+
 	public CompositeProcessor getProcessor() {
 		return processor;
 	}
+
 	public void setProcessor(CompositeProcessor processor) {
 		this.processor = processor;
 	}
-	
-	
+
 	public DataWriter getDataWriter() {
 		return dataWriter;
 	}
+
 	public void setDataWriter(DataWriter dataWriter) {
 		this.dataWriter = dataWriter;
 	}
-	public int  doStep(int filenumber) {
-		int count=0;
-		List<Multimap<String,String>> result = dataReader.getQueryResult();
-		for(int i=0;i<result.size();i++){
+
+	public int doStep(int filenumber) {
+		int count = 0;
+		List<Multimap<String, String>> result = dataReader.getQueryResult();
+		for (int i = 0; i < result.size(); i++) {
 			count++;
-			//new SingleThread(dataWriter.getIdname(),result.get(i),processor,dataWriter).run();
-			new SingleThread(filenumber,dataWriter.getIdname(),result.get(i),processor,dataWriter).run();
+			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
+					processor, dataWriter).run();
 		}
-			return count;
+		return count;
+	}
+
+	public int getFileId(String filepath, int filenumber) {
+		if (!filepath.endsWith("/"))
+			filepath = filepath + "/";
+		File file = new File(filepath + filenumber + ".nt");
+		double length = (double) (file.length() / 1024.0 / 1024.0);
+		if (length > 50.0) {
+			filenumber++;
+		}
+		return filenumber;
 	}
 }
