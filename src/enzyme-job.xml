@@ -14,11 +14,11 @@
 	</bean>
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
-		<property name="dataBase" value="meterial"></property>
+		<property name="dataBase" value="material"></property>
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
-			value="SELECT distinct ?enzymeId ?enzymeName ?sysname ?class ?reactionSource ?substrate ?product ?comment ?history ?keggGeneSource ?keggGeneStdId" />
+			value="SELECT distinct ?enzymeId ?enzymeName ?sysname ?class ?reactionSource ?substrate ?product ?comment ?history  ?keggGeneStdId" />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. optional{?s &lt;http://bds.csdb.cn/material/kegg/sysname> ?sysname.} optional{?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/substrate> ?substrate.} optional{?s &lt;http://bds.csdb.cn/material/kegg/product> ?product.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.} optional{?s &lt;http://bds.csdb.cn/material/kegg/history> ?history.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.} optional{?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}" />		
 		<property name="limit" value="50000" />
@@ -32,7 +32,7 @@
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/enzyme/" />
 		<property name="sprefix" value="http://gcm.wfcc.info/keggenzyme/" />
-		<property name="idname" value="enzymeId" />
+		<property name="idname" value="rdfs:label" />
 		<property name="namespace">
 			<map>
 				<entry key="dc">
