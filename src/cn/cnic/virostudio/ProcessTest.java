@@ -20,7 +20,8 @@ public class ProcessTest {
 		ProcessTest test=new ProcessTest();
 		//test.taxonomyTest();
 		//test.genebankTest();
-		test.geneTest();
+		//test.geneTest();
+		test.keggenzymeTest();
 	}
 
 	public void genebankTest() {
@@ -90,4 +91,27 @@ public class ProcessTest {
 		System.out.println("after process " + processor2.process(resultmap2));
 		
 	}
+	
+	public void keggenzymeTest() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				new String[] { "enzyme-job.xml" });
+		//JobController job = context.getBean("job", JobController.class);
+		//job.doListener();
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		resultmap.put("enzymeId", "1.1.1.1");
+		resultmap.put("enzymeName", "ADH");
+		resultmap.put("sysname", "alcohol:NAD+ oxidoreductase");
+		resultmap.put("class", "Oxidoreductases;Acting on the CH-OH group of donors;With NAD+ or NADP+ as acceptor");
+		resultmap.put("reactionSource", "http://bds.csdb.cn/material/kegg/reaction/R07326");
+		resultmap.put("substrate", "http://bds.csdb.cn/material/kegg/compound/C00003");
+		resultmap.put("product", "http://bds.csdb.cn/material/kegg/compound/C00004");
+		resultmap.put("comment", "A zinc protein. Acts on primary or secondary alcohols or hemi-acetals with very broad");
+		resultmap.put("history", "EC 1.1.1.1 created 1961, modified 2011");
+		resultmap.put("keggGeneStdId", "hsa:124");
+		System.out.println("before process " + resultmap);
+		CompositeProcessor processor = context.getBean("main-processor",
+				CompositeProcessor.class);
+		System.out.println("afer process " + processor.process(resultmap));
+	}
+
 }
