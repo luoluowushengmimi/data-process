@@ -68,7 +68,7 @@ public class Step {
 		while(true){
 			File file = new File(filepath + filenumber + ".nt");
 			double length = (double) (file.length() / 1024.0 / 1024.0);
-			if (length >=3.0) {
+			if (length >=100.0) {
 				filenumber++;
 			}
 			else{
