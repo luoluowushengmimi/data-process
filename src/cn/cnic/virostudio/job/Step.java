@@ -50,10 +50,12 @@ public class Step {
 
 	public int doStep(int filenumber) {
 		int count = 0;
+		loginfo.info("传入的filenumber----------------------- :"+filenumber);
 		List<Multimap<String, String>> result = dataReader.getQueryResult();
 		for (int i = 0; i < result.size(); i++) {
 			count++;
 			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+			loginfo.info("最终确定的filenumber----------------------- :"+filenumber);
 			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
 					processor, dataWriter).run();
 		}
@@ -63,11 +65,15 @@ public class Step {
 	public int getFileId(String filepath, int filenumber) {
 		if (!filepath.endsWith("/"))
 			filepath = filepath + "/";
-		File file = new File(filepath + filenumber + ".nt");
-		double length = (double) (file.length() / 1024.0 / 1024.0);
-		if (length > 50.0) {
-			filenumber++;
+		while(true){
+			File file = new File(filepath + filenumber + ".nt");
+			double length = (double) (file.length() / 1024.0 / 1024.0);
+			if (length >=3.0) {
+				filenumber++;
+			}
+			else{
+				return filenumber;
+			}
 		}
-		return filenumber;
 	}
 }
