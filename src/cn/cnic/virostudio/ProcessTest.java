@@ -95,8 +95,6 @@ public class ProcessTest {
 	public void keggenzymeTest() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "enzyme-job.xml" });
-		//JobController job = context.getBean("job", JobController.class);
-		//job.doListener();
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
 		resultmap.put("enzymeId", "1.1.1.1");
 		resultmap.put("enzymeName", "ADH");
