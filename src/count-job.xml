@@ -21,12 +21,12 @@
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
 		<property name="whereClause"
-			value="where { ?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. optional{?feature &lt;http://bds.csdb.cn/material/genbank/location> ?location.} ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?feature &lt;http://bds.csdb.cn/material/genbank/featureTagName> ?featureTagName. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/locus_tag> ?locus_tag.} optional{?location &lt;http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.} optional{?location &lt;http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.} optional{?location &lt;http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.}}" />
+			value="where { ?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt.  optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}} " />
 	</bean>
 	<bean id="source" class="java.lang.String">
 		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
 	</bean>
-	<bean id="datareader" class="cn.cnic.virostudio.count.CountAll">
+	<bean id="datareadergene2" class="cn.cnic.virostudio.count.CountAll">
 		<property name="dataSource" ref="source" />
 		<property name="dataBase" value="material"></property>
 		<property name="userName" value="dba"></property>
@@ -34,5 +34,14 @@
 		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/gene/geneId> ?geneId. ?s &lt;http://bds.csdb.cn/material/gene/taxonSource> ?taxonSource. ?s &lt;http://bds.csdb.cn/material/gene/symbol> ?symbol. ?s &lt;http://bds.csdb.cn/material/gene/description> ?description.?s &lt;http://bds.csdb.cn/material/gene/geneType> ?geneType.} " />
+	</bean>
+	<bean id="datareaderenzyme" class="cn.cnic.virostudio.count.CountAll">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
+		<property name="whereClause"
+			value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. optional{?s &lt;http://bds.csdb.cn/material/kegg/sysname> ?sysname.} optional{?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/substrate> ?substrate.} optional{?s &lt;http://bds.csdb.cn/material/kegg/product> ?product.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.} optional{?s &lt;http://bds.csdb.cn/material/kegg/history> ?history.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.} optional{?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}" />
 	</bean>
 </beans>
