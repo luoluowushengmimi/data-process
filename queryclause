@@ -13,6 +13,10 @@
  optional{ ?dblink <http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} 
 optional{?qualifier <http://bds.csdb.cn/material/genbank/strain> ?strain.}} limit 100 offset 0
 
+估计还有一些是因为加入了distinct的缘故
+7092714
+如果没有definition和keywords的话，一共有：
+32488650
 处理好的数据查询：
 SELECT ?comment  ?organism ?gene ?project ?BioProject ?label ?status 
 where {
@@ -59,7 +63,7 @@ query:
  ?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.
  ?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.
  ?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.
-} limit 100 offset 0
+} limit 10000 offset 0
 
 第二个query：
 
@@ -69,8 +73,9 @@ SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType
  ?s <http://bds.csdb.cn/material/gene/symbol> ?symbol. 
  ?s <http://bds.csdb.cn/material/gene/description> ?description.
  ?s <http://bds.csdb.cn/material/gene/geneType> ?geneType.
-} limit 100 offset 0
+} limit 10000 offset 0
 
+这个有9941830条数据
 
  正则：
      以scientific name开头的任意字符串
@@ -88,4 +93,22 @@ SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType
    以complement开头
    (^(complement))(.*)
 
+对数据经常用的查询语句
+prefix kegg:<http://bds.csdb.cn/material/kegg/>
+SELECT ?p ?o
+WHERE  { ?s kegg:pathwayId "map00030" ;?p ?o} 
 
+prefix kegg:<http://bds.csdb.cn/material/kegg/>
+SELECT ?s ?p ?o
+WHERE  { ?s kegg:enzymeId "1.1.1.1" ;?p ?o} 
+
+ PREFIX kegg: <http://bds.csdb.cn/material/kegg/> 
+PREFIX dbsm: <http://bds.csdb.cn/material/>
+ SELECT ?s ?id ?dbType ?dbClass from<material> 
+WHERE {  
+          ?s dbsm:dbType 'kegg' . 
+          ?s dbsm:dbClass 'enzyme'  .  
+          ?s kegg:enzymeId ?id.
+          ?s dbsm:dbClass ?dbClass .
+          ?s dbsm:dbType ?dbType .
+ } limit 10
