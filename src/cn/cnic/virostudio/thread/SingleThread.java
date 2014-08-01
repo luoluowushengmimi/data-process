@@ -55,7 +55,7 @@ public class SingleThread {
 		loginfo.info("after process map: "+processmap );
 		if(processmap==null) return;
 		String id=processmap.get(idname).iterator().next();
-		loginfo.info("id: "+id );
+		//loginfo.info("id: "+id );
 		if(id==null) {
 			logerr.error("id: "+id +"不存在！");
 			throw new RuntimeException();
