@@ -59,6 +59,7 @@ public class Step {
 			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
 					processor, dataWriter).run();
 		}
+		System.gc();
 		return count;
 	}
 
