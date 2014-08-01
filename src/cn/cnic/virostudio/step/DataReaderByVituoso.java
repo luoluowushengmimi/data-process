@@ -90,7 +90,6 @@ public class DataReaderByVituoso implements DataReader {
 	 */
 	public List<Multimap<String,String>> getQueryResult(){
 		List <Multimap<String, String>> list = new ArrayList<Multimap<String, String>>();
-		//VirtGraph set = new VirtGraph ("jdbc:virtuoso://192.168.94.50:1111", "dba", "dba");
 		VirtGraph set = new VirtGraph (dataSource, userName, passWord);
 		String query=selectClause+" from "+"<"+dataBase+">"+" "+whereClause+" limit "+limit+" offset "+offset;
 		loginfo.info(query);
@@ -114,6 +113,7 @@ public class DataReaderByVituoso implements DataReader {
 			}
 			list.add(resultmap);
 		}
+		set.close();
 		return list;
 	}
 }
