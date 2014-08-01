@@ -50,12 +50,12 @@ public class Step {
 
 	public int doStep(int filenumber) {
 		int count = 0;
-		loginfo.info("传入的filenumber----------------------- :"+filenumber);
+		//loginfo.info("传入的filenumber----------------------- :"+filenumber);
 		List<Multimap<String, String>> result = dataReader.getQueryResult();
 		for (int i = 0; i < result.size(); i++) {
 			count++;
 			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
-			loginfo.info("最终确定的filenumber----------------------- :"+filenumber);
+			//loginfo.info("最终确定的filenumber----------------------- :"+filenumber);
 			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
 					processor, dataWriter).run();
 		}
