@@ -113,6 +113,7 @@ public class DataReaderByVituoso implements DataReader {
 			}
 			list.add(resultmap);
 		}
+		vqe.close();
 		set.close();
 		return list;
 	}
