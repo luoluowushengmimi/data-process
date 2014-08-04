@@ -52,18 +52,19 @@ query:
  第一个query：
  
  SELECT distinct ?locusId ?featureTagName dbXrefTxt ?locus_tag ?seqMax ?seqMin ?locationTxt 
- where {?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
+ where {
+ ?s <http://bds.csdb.cn/material/genbank/locusId> ?locusId. 
  ?s <http://bds.csdb.cn/material/genbank/feature> ?feature.
- ?feature <http://bds.csdb.cn/material/genbank/location> ?location.
+ optional{?feature <http://bds.csdb.cn/material/genbank/location> ?location.}
   ?feature <http://bds.csdb.cn/material/genbank/qualifier> ?qualifier.
   ?feature <http://bds.csdb.cn/material/genbank/featureTagName> ?featureTagName.
   ?qualifier <http://bds.csdb.cn/material/genbank/dbxref> ?dbxref.
  ?dbxref <http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. 
-  ?qualifier <http://bds.csdb.cn/material/genbank/locus_tag> ?locus_tag.
- ?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.
- ?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.
- ?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.
-} limit 10000 offset 0
+   optional{?qualifier <http://bds.csdb.cn/material/genbank/locus_tag> ?locus_tag.}
+ optional{?location <http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.}
+ optional{?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.}
+ optional{?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.}
+}
 
 第二个query：
 
@@ -76,6 +77,87 @@ SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType
 } limit 10000 offset 0
 
 这个有9941830条数据
+
+enzyme
+
+SELECT distinct ?enzymeId ?enzymeName ?sysname ?class ?reactionSource ?substrate ?product ?comment ?history ?keggGeneSource ?keggGeneStdId
+ where {
+ ?s <http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. 
+ ?s <http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. 
+ optional{?s <http://bds.csdb.cn/material/kegg/sysname> ?sysname.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/class> ?class.}
+ optional{?s <http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.}
+ optional{?s <http://bds.csdb.cn/material/kegg/substrate> ?substrate.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/product> ?product.} 
+optional{?s <http://bds.csdb.cn/material/kegg/comment> ?comment.}
+optional{?s <http://bds.csdb.cn/material/kegg/history> ?history.}
+optional{?s <http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.
+optional {?keggGeneSource <http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}
+}
+} limit 100 offset 0
+
+139602036
+
+glycan 
+
+SELECT distinct ?glycanId ?glycanName ?composition ?mass 
+ where {
+ ?s <http://bds.csdb.cn/material/kegg/glycanId> ?glycanId. 
+ ?s <http://bds.csdb.cn/material/kegg/glycanName> ?glycanName. 
+ optional{?s <http://bds.csdb.cn/material/kegg/composition> ?composition.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/mass> ?mass.}
+}
+} limit 10000 offset 0
+
+1693
+
+compound
+
+SELECT distinct ?compoundId ?compoundName ?formula ?remark ?exactMass ?molWeight ?comment
+ where {
+ ?s <http://bds.csdb.cn/material/kegg/compoundId> ?compoundId. 
+ ?s <http://bds.csdb.cn/material/kegg/compoundName> ?compoundName. 
+ optional{?s <http://bds.csdb.cn/material/kegg/formula> ?formula.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/remark> ?remark.}
+ optional{?s <http://bds.csdb.cn/material/kegg/exactMass> ?exactMass.}
+ optional{?s <http://bds.csdb.cn/material/kegg/molWeight> ?molWeight.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/comment> ?comment.}
+} 
+
+17254
+
+reaction
+SELECT distinct ?reactionId ?reactionName ?definition ?equation ?comment
+ where {
+ ?s <http://bds.csdb.cn/material/kegg/reactionId> ?reactionId. 
+ ?s <http://bds.csdb.cn/material/kegg/reactionName> ?reactionName. 
+ optional{?s <http://bds.csdb.cn/material/kegg/definition> ?definition.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/equation> ?equation.}
+ optional{?s <http://bds.csdb.cn/material/kegg/comment> ?comment.}
+} 
+
+7185
+
+pathway
+
+SELECT distinct ?pathwayId ?pathwayName ?class ?enzymeSource ?pathwayKoSource ?compoundSource ?diseaseSource ?pmid ?keggGeneStdId
+ where {
+ ?s <http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. 
+ ?s <http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. 
+ ?s <http://bds.csdb.cn/material/kegg/class> ?class.
+ optional{?s <http://bds.csdb.cn/material/kegg/enzymeSource> ?enzymeSource.}
+ optional{?s <http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} 
+ optional{?s <http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} 
+optional{?s <http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.}
+optional{?s <http://bds.csdb.cn/material/kegg/reference> ?reference .
+?reference <http://bds.csdb.cn/material/kegg/pmid> ?pmid .
+}
+optional{?s <http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.
+?keggGeneSource <http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.
+}
+}
+
+1978529128
 
  正则：
      以scientific name开头的任意字符串
@@ -112,3 +194,9 @@ WHERE {
           ?s dbsm:dbClass ?dbClass .
           ?s dbsm:dbType ?dbType .
  } limit 10
+ 
+ 
+ 
+ prefix kegg:<http://bds.csdb.cn/material/kegg/>
+SELECT ?s ?p ?o 
+WHERE  { ?s kegg:keggGeneId "51166";?p ?o} limit 10
