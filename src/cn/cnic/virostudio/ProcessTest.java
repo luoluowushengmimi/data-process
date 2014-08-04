@@ -21,7 +21,8 @@ public class ProcessTest {
 		//test.taxonomyTest();
 		//test.genebankTest();
 		//test.geneTest();
-		test.keggenzymeTest();
+		//test.keggenzymeTest();
+		test.keggCompound();
 	}
 
 	public void genebankTest() {
@@ -112,4 +113,21 @@ public class ProcessTest {
 		System.out.println("afer process " + processor.process(resultmap));
 	}
 
+	
+	public void keggCompound() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				new String[] { "compound-job.xml" });
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		resultmap.put("compoundId", "C00001");
+		resultmap.put("compoundName", "C00001");
+		resultmap.put("formula", "H2O");
+		resultmap.put("remark", "Same as: G08646");
+		resultmap.put("exactMass", "506.9957");
+		resultmap.put("molWeight", "507.181");
+		resultmap.put("comment", "Source: Streptomyces tsukubaensis [TAX:83656]4 Pyd is modified by vinyl. (allylmalonyl-CoA extension unit)");
+		System.out.println("before process " + resultmap);
+		CompositeProcessor processor = context.getBean("main-processor",
+				CompositeProcessor.class);
+		System.out.println("afer process " + processor.process(resultmap));
+	}
 }
