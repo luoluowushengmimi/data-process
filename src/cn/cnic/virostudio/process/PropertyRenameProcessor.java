@@ -40,7 +40,7 @@ public class PropertyRenameProcessor extends AbstractProcessor {
 			String newOvalue=oldOvalue.replaceAll(change.otrim,"");
 			input.put(change.pnewName, change.oprefix + newOvalue.trim());
 		}
-		else { // if (!matchRule.otype.equalsIgnoreCase("uri")) {
+		else { 
 			String oldOvalue=input.get(pname).iterator().next();
 			String newOvalue=oldOvalue.replaceAll(change.otrim,"");
 			input.put(change.pnewName, "\"" + change.oprefix + newOvalue.trim() + "\"");
