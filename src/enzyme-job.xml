@@ -215,6 +215,7 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:xKeggGene" />
 				<property name="oprefix" value="http://gcm.wfcc.info/kegggene/"></property>
+				<property name="otype" value="uri"></property>
 			</bean>
 		</property>
 	</bean>
