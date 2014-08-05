@@ -38,12 +38,12 @@ public class PropertyRenameProcessor extends AbstractProcessor {
 		if(change.otype.equalsIgnoreCase("uri")) {
 			String oldOvalue=input.get(pname).iterator().next();
 			String newOvalue=oldOvalue.replaceAll(change.otrim,"");
-			input.put(change.pnewName, change.oprefix + newOvalue);
+			input.put(change.pnewName, change.oprefix + newOvalue.trim());
 		}
 		else { // if (!matchRule.otype.equalsIgnoreCase("uri")) {
 			String oldOvalue=input.get(pname).iterator().next();
 			String newOvalue=oldOvalue.replaceAll(change.otrim,"");
-			input.put(change.pnewName, "\"" + change.oprefix + newOvalue + "\"");
+			input.put(change.pnewName, "\"" + change.oprefix + newOvalue.trim() + "\"");
 		}
 		input.removeAll(pname);
 	
