@@ -121,7 +121,7 @@ public class ProcessTest {
 		resultmap.put("compoundId", "C00001");
 		resultmap.put("compoundName", "C00001");
 		resultmap.put("formula", "H2O");
-		resultmap.put("remark", "Same as: G08646");
+		resultmap.put("remark", "Same as: D00046 G00000");
 		resultmap.put("exactMass", "506.9957");
 		resultmap.put("molWeight", "507.181");
 		resultmap.put("comment", "Source: Streptomyces tsukubaensis [TAX:83656]4 Pyd is modified by vinyl. (allylmalonyl-CoA extension unit)");
