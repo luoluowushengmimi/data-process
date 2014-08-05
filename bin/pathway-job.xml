@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="SELECT distinct ?pathwayId ?pathwayName ?class ?enzymeSource ?pathwayKoSource ?compoundSource ?diseaseSource ?pmid ?keggGeneStdId" />
+		<property name="whereClause"
+		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class. optional{?s &lt;http://bds.csdb.cn/material/kegg/enzymeSource> ?enzymeSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reference> ?reference . ?reference &lt;http://bds.csdb.cn/material/kegg/pmid> ?pmid.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource. ?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}"/>
+		<property name="limit" value="50000" />
+		<property name="offset" value="0" />
+	</bean>
+
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+	</bean>
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/pathway/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/keggpathway/" />
+		<property name="idname" value="rdfs:label" />
+		<property name="namespace">
+			<map>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+				<entry key="rdf">
+					<value>http://www.w3.org/1999/02/22-rdf-syntax-ns#</value>
+				</entry>
+				<entry key="rdfs">
+					<value>http://www.w3.org/2000/01/rdf-schema#</value>
+				</entry>
+				<entry key="GCM">
+					<value>http://gcm.wdcm.org/gcm/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor">
+				<property name="conditions">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
+
+		<property name="processors">
+			<list>
+				<ref bean="pathwayId-processor" />
+				<ref bean="pathwayName-processor" />
+				<ref bean="class-processor" />
+				<ref bean="keggGeneStdId-processor" />
+				<ref bean="enzymeSource-processor" />
+				<ref bean="pathwayKoSource-processor" />
+				<ref bean="compoundSource-processor" />
+				<ref bean="diseaseSource-processor" />
+				<ref bean="pmid-processor" />
+				<ref bean="add-orientproperty-processor" />
+				<ref bean="add-typeproperty-processor" />
+				
+			</list>
+		</property>
+		
+		<property name="postProcessor">
+			<bean class="cn.cnic.virostudio.process.PostProcessor">
+			  <property name="removeKeys">
+			    <list>
+			    </list>
+			  </property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="pathwayId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="pathwayId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:label" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="pathwayName-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="pathwayName" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:symbol"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="class-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="class" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:class" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="keggGeneStdId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="keggGeneStdId" />
+				</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xKeggGene" />
+				<property name="oprefix" value="http://gcm.wfcc.info/kegggene/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="enzymeSource-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="enzymeSource" />
+				</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xEnzyme" />
+				<property name="otrim" value="http://bds.csdb.cn/material/kegg/enzyme/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggenzyme/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="pathwayKoSource-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="pathwayKoSource" />
+					
+				</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xKO"/>
+				<property name="otrim" value="http://bds.csdb.cn/material/kegg/pathWayKo/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggkO/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="compoundSource-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="compoundSource" />
+				</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xCompound"/>
+				<property name="otrim" value="http://bds.csdb.cn/material/kegg/compound/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggcompound/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="diseaseSource-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="diseaseSource" />
+				</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xDisease"/>
+				<property name="otrim" value="http://bds.csdb.cn/material/kegg/disease/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggdisease/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="pmid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="pmid" />
+				</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xPubmed"/>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggpubmed/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="rdfs:label" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:source" />
+				<property name="oprefix" value="http://bds.csdb.cn/material/kegg/pathway/" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdf:type" />
+				<property name="content" value="http://gcm.wfcc.info/type/keggpathway" />
+			</bean>
+		</property>
+	</bean>
+</beans>

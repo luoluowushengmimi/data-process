@@ -21,8 +21,8 @@ public class ProcessTest {
 		//test.taxonomyTest();
 		//test.genebankTest();
 		//test.geneTest();
-		//test.keggenzymeTest();
-		test.keggCompound();
+		test.keggenzymeTest();
+		//test.keggCompound();
 	}
 
 	public void genebankTest() {

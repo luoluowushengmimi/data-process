@@ -20,7 +20,7 @@ public class VirtuosoSPARQLExample1 {
 
 /*			STEP 3			*/
 /*		Select all data in virtuoso	*/
-		Query sparql = QueryFactory.create("SELECT * from <meterial> WHERE {  ?s ?p ?o  }");
+		Query sparql = QueryFactory.create("SELECT * from <material> WHERE {  ?s ?p ?o  }");
 
 /*			STEP 4			*/
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
