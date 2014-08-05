@@ -40,8 +40,9 @@ public class SplitProcessor extends AbstractProcessor {
 		String pname = matchRule.getPname();
 		if (!input.containsKey(pname))
 			return input;
-
-		String[] split_triples = input.get(pname).iterator().next()
+		String oldOvalue=input.get(pname).iterator().next();
+		String newOvalue=oldOvalue.replaceAll(change.otrim,"");
+		String[] split_triples = newOvalue
 				.split(change.osplitTag);
 		input.removeAll(pname);
 		for (String split_triple : split_triples) {
