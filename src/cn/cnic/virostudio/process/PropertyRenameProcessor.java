@@ -46,7 +46,6 @@ public class PropertyRenameProcessor extends AbstractProcessor {
 			input.put(change.pnewName, "\"" + change.oprefix + newOvalue.trim() + "\"");
 		}
 		input.removeAll(pname);
-	
 		return input;
 	}
 	
