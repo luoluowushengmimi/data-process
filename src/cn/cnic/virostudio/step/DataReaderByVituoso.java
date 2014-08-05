@@ -91,7 +91,8 @@ public class DataReaderByVituoso implements DataReader {
 	public List<Multimap<String,String>> getQueryResult(){
 		List <Multimap<String, String>> list = new ArrayList<Multimap<String, String>>();
 		VirtGraph set = new VirtGraph (dataSource, userName, passWord);
-		String query=selectClause+" from "+"<"+dataBase+">"+" "+whereClause+" limit "+limit+" offset "+offset;
+		//String query=selectClause+" from "+"<"+dataBase+">"+" "+whereClause+" limit "+limit+" offset "+offset;
+		String query=selectClause+" from "+"<"+dataBase+">"+" "+whereClause;
 		loginfo.info(query);
 				//Query sparql = QueryFactory.create("SELECT * from <test> WHERE {  ?s ?p ?o  } limit 100");
 		Query sparql = QueryFactory.create(query);
