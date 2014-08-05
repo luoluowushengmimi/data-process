@@ -44,4 +44,45 @@
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. optional{?s &lt;http://bds.csdb.cn/material/kegg/sysname> ?sysname.} optional{?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/substrate> ?substrate.} optional{?s &lt;http://bds.csdb.cn/material/kegg/product> ?product.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.} optional{?s &lt;http://bds.csdb.cn/material/kegg/history> ?history.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.} optional{?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}" />
 	</bean>
+	
+	<bean id="datareaderCompound" class="cn.cnic.virostudio.count.CountAll">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
+		<property name="whereClause"
+		   value="where {?s &lt;http://bds.csdb.cn/material/kegg/compoundId> ?compoundId. ?s &lt;http://bds.csdb.cn/material/kegg/compoundName> ?compoundName. optional{?s &lt;http://bds.csdb.cn/material/kegg/formula> ?formula.} optional{?s &lt;http://bds.csdb.cn/material/kegg/remark> ?remark.} optional{?s &lt;http://bds.csdb.cn/material/kegg/exactMass> ?exactMass.} optional{?s &lt;http://bds.csdb.cn/material/kegg/molWeight> ?molWeight.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} " />
+	</bean>
+	
+	<bean id="datareaderGlycan" class="cn.cnic.virostudio.count.CountAll">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
+		<property name="whereClause"
+		   value="where { ?s &lt;http://bds.csdb.cn/material/kegg/glycanId> ?glycanId. ?s &lt;http://bds.csdb.cn/material/kegg/glycanName> ?glycanName. optional{?s &lt;http://bds.csdb.cn/material/kegg/composition> ?composition.} optional{?s &lt;http://bds.csdb.cn/material/kegg/mass> ?mass.}}" />
+	</bean>
+	
+	<bean id="datareaderPathway" class="cn.cnic.virostudio.count.CountAll">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
+		<property name="whereClause"
+		   		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class. optional{?s &lt;http://bds.csdb.cn/material/kegg/enzymeSource> ?enzymeSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reference> ?reference . ?reference &lt;http://bds.csdb.cn/material/kegg/pmid> ?pmid.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource. ?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}"/>
+	</bean>
+	
+	<bean id="datareaderReaction" class="cn.cnic.virostudio.count.CountAll">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
+		<property name="whereClause"
+		  value=" where { ?s &lt;http://bds.csdb.cn/material/kegg/reactionId> ?reactionId. ?s &lt;http://bds.csdb.cn/material/kegg/reactionName> ?reactionName. optional{?s &lt;http://bds.csdb.cn/material/kegg/definition> ?definition.} optional{?s &lt;http://bds.csdb.cn/material/kegg/equation> ?equation.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} "/>
+	</bean>
+	
 </beans>
