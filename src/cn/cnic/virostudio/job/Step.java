@@ -1,11 +1,25 @@
 package cn.cnic.virostudio.job;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
+
+import virtuoso.jena.driver.VirtGraph;
+import virtuoso.jena.driver.VirtuosoQueryExecution;
+import virtuoso.jena.driver.VirtuosoQueryExecutionFactory;
+
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+
 import cn.cnic.virostudio.process.CompositeProcessor;
 import cn.cnic.virostudio.step.DataReader;
 import cn.cnic.virostudio.step.DataWriter;
@@ -48,20 +62,20 @@ public class Step {
 		this.dataWriter = dataWriter;
 	}
 
-	public int doStep(int filenumber) {
-		int count = 0;
-		//loginfo.info("传入的filenumber----------------------- :"+filenumber);
-		List<Multimap<String, String>> result = dataReader.getQueryResult();
-		for (int i = 0; i < result.size(); i++) {
-			count++;
-			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
-			//loginfo.info("最终确定的filenumber----------------------- :"+filenumber);
-			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
-					processor, dataWriter).run();
-		}
-		System.gc();
-		return count;
-	}
+//	public int doStep(int filenumber) {
+//		int count = 0;
+//		//loginfo.info("传入的filenumber----------------------- :"+filenumber);
+//		List<Multimap<String, String>> result = dataReader.getQueryResult();
+//		for (int i = 0; i < result.size(); i++) {
+//			count++;
+//			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+//			//loginfo.info("最终确定的filenumber----------------------- :"+filenumber);
+//			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
+//					processor, dataWriter).run();
+//		}
+//		System.gc();
+//		return count;
+//	}
 
 	public int getFileId(String filepath, int filenumber) {
 		if (!filepath.endsWith("/"))
@@ -76,5 +90,40 @@ public class Step {
 				return filenumber;
 			}
 		}
+	}
+	
+	public  int doStep(int filenumber){
+		int count = 0;
+		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
+		//String query=selectClause+" from "+"<"+dataBase+">"+" "+whereClause+" limit "+limit+" offset "+offset;
+		String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
+		loginfo.info(query);
+				//Query sparql = QueryFactory.create("SELECT * from <test> WHERE {  ?s ?p ?o  } limit 100");
+		Query sparql = QueryFactory.create(query);
+		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
+		ResultSet results = vqe.execSelect();
+		loginfo.info("测试应该是读取成功");
+		while (results.hasNext()) {
+			count++;
+			Multimap<String, String> resultmap = ArrayListMultimap.create();
+			QuerySolution result = results.nextSolution();
+			Iterator<String> iter=result.varNames();
+			while(iter.hasNext()){
+				String name=iter.next();
+				RDFNode node=result.get(name);
+				String nodevalue=node.toString();
+				if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
+					nodevalue=nodevalue.substring(0, nodevalue.length()-1);
+				}
+				resultmap.put(name, nodevalue);
+			}
+			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+			System.out.println(resultmap);
+			new SingleThread(filenumber, dataWriter.getIdname(),resultmap,
+					processor, dataWriter).run();
+		}
+		vqe.close();
+		set.close();
+		return count;
 	}
 }
