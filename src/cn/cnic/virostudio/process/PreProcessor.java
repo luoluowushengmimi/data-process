@@ -1,7 +1,9 @@
 package cn.cnic.virostudio.process;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,6 +26,22 @@ public class PreProcessor {
 	}
 	
 	public Multimap<String, String> getFilterResult(Multimap<String, String> map){
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		Iterator iter = map.entries().iterator();
+		while(iter.hasNext())
+		{
+		      Map.Entry<String, String> entry = (Map.Entry<String, String>)iter.next();
+		      String key=entry.getKey();
+		     String value=entry.getValue();
+		      if("".equals(value)||value==null){
+		      }
+		      else{
+		    	  resultmap.put(key, value);
+		      }
+		}
+		return this.getFilter(resultmap);
+	}
+	public Multimap<String, String> getFilter(Multimap<String, String> map){
 		if(conditions==null||conditions.size()==0)
 			return map;
 		if(this.isSave(map, conditions)){
@@ -37,7 +55,6 @@ public class PreProcessor {
 	public boolean isSave(Multimap<String, String> map,List<FilterCondition> conditions){
 		boolean tag=true;
 		for(FilterCondition condition:conditions){
-			//info.info("condition:" +condition.getKey()+ " "+condition.getValue()+" "+condition.getMatchRule());
 			boolean temp=this.isSave(map, condition);
 			tag=tag&&temp;
 		}
