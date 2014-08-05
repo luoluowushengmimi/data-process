@@ -20,7 +20,7 @@
 		<property name="selectClause"
 			value="SELECT distinct ?compoundId ?compoundName ?formula ?remark ?exactMass ?molWeight ?comment" />
 		<property name="whereClause"
-		   value="where {?s &lt;http://bds.csdb.cn/material/kegg/compoundId> ?compoundId. ?s &lt;http://bds.csdb.cn/material/kegg/compoundName> ?compoundName. optional{?s &lt;http://bds.csdb.cn/material/kegg/formula> ?formula.} optional{?s &lt;http://bds.csdb.cn/material/kegg/remark> ?remark.} optional{?s &lt;http://bds.csdb.cn/material/kegg/exactMass> ?exactMass.} optional{?s &lt;http://bds.csdb.cn/material/kegg/molWeight> ?molWeight.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} " />
+			value="where {?s &lt;http://bds.csdb.cn/material/kegg/compoundId> ?compoundId. ?s &lt;http://bds.csdb.cn/material/kegg/compoundName> ?compoundName. optional{?s &lt;http://bds.csdb.cn/material/kegg/formula> ?formula.} optional{?s &lt;http://bds.csdb.cn/material/kegg/remark> ?remark.} optional{?s &lt;http://bds.csdb.cn/material/kegg/exactMass> ?exactMass.} optional{?s &lt;http://bds.csdb.cn/material/kegg/molWeight> ?molWeight.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} " />
 		<property name="limit" value="50000" />
 		<property name="offset" value="0" />
 	</bean>
@@ -65,7 +65,7 @@
 				<ref bean="compoundId-processor" />
 				<ref bean="compoundName-processor" />
 				<ref bean="formula-processor" />
-				<ref bean="switch-processor" />
+				<ref bean="remark-processor" />
 				<ref bean="exactMass-processor" />
 				<ref bean="molWeight-processor" />
 				<ref bean="comment-processor" />
@@ -74,13 +74,14 @@
 				
 			</list>
 		</property>
-		
+
 		<property name="postProcessor">
 			<bean class="cn.cnic.virostudio.process.PostProcessor">
-			  <property name="removeKeys">
-			    <list>
-			    </list>
-			  </property>
+				<property name="removeKeys">
+					<list>
+					  <value>remarktwo</value>
+					</list>
+				</property>
 			</bean>
 		</property>
 	</bean>
@@ -105,7 +106,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:symbol"/>
+				<property name="pnewName" value="GCM:symbol" />
 			</bean>
 		</property>
 	</bean>
@@ -121,51 +122,96 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
+	<bean id="remark-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor">
+				<property name="conditions">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
+
 		<property name="processors">
 			<list>
-				<ref bean="remark-D-processor" />
-				<ref bean="remark-G-processor" />
+				<ref bean="remark-stepone-processor" />
+				<ref bean="remark-steptwo-processor" />
+				<ref bean="remark-stepthree-processor" />
 			</list>
 		</property>
+
+		<property name="postProcessor">
+			<bean class="cn.cnic.virostudio.process.PostProcessor">
+				<property name="removeKeys">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
 	</bean>
-	<bean id="remark-D-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+	<bean id="remark-stepone-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="remark" />
-					<property name="ofilter" value="(^(Same as: D))(.*)" />
-				</bean>
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="remark" />
+			</bean>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="remarkone" />
+				<property name="otrim" value="Same as: "></property>
+			</bean>
+		</property>
+	</bean>
+ 	<bean id="remark-steptwo-processor" class="cn.cnic.virostudio.process.SplitProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="remarkone" />
+
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="remarktwo" />
+				<property name="otrim" value="&quot;"></property>
+				<property name="osplitTag" value=" " />
+			</bean>
+		</property>
+	</bean>
+	<bean id="remark-stepthree-processor" class="cn.cnic.virostudio.process.OneToMultiProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="remarktwo" />
+				<property name="ofilter" value="(^(&quot;D|&quot;G))(.*)" />
+			</bean>
+		</property>
+		<property name="modifies">
+          <list>
+              <ref bean="remark-D-change"></ref>
+              <ref bean="remark-G-change"></ref>
+          </list>
+		</property>
+
+
+	</bean>
+	<bean id="remark-D-change" class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:xDrug" />
-				<property name="otrim" value="Same as:"></property>
+				<property name="content" value="(^(&quot;D))(.*)"></property>
 				<property name="oprefix" value="http://gcm.wfcc.info/keggdrug/"></property>
+				<property name="otrim" value="&quot;"></property>
 				<property name="otype" value="uri"></property>
-			</bean>
-		</property>
 	</bean>
-	<bean id="remark-G-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
-		<property name="matchRule">
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="remark" />
-					<property name="ofilter" value="(^(Same as: G))(.*)" />
-				</bean>
-		</property>
-		<property name="change">
-			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:xDrug" />
-				<property name="otrim" value="Same as:"></property>
-					<property name="oprefix" value="http://gcm.wfcc.info/keggglycan/"></property>
-					<property name="otype" value="uri"></property>
-			</bean>
-		</property>
+	<bean id="remark-G-change" class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:xGlycan" />
+				<property name="content" value="(^(&quot;G))(.*)"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggglycan/"></property>
+				<property name="otrim" value="&quot;"></property>
+				<property name="otype" value="uri"></property>
 	</bean>
 	<bean id="exactMass-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="exactMass" />
-				</bean>
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="exactMass" />
+			</bean>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
@@ -175,9 +221,9 @@
 	</bean>
 	<bean id="molWeight-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="molWeight" />
-				</bean>
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="molWeight" />
+			</bean>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
@@ -187,13 +233,13 @@
 	</bean>
 	<bean id="comment-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="comment" />
-				</bean>
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="comment" />
+			</bean>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="rdfs:comment"/>
+				<property name="pnewName" value="rdfs:comment" />
 			</bean>
 		</property>
 	</bean>
