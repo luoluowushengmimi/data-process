@@ -15,4 +15,5 @@ public interface DataWriter {
 	public String getFilePath() ;
 	
 	public void write(int fileId,ArrayList<Multimap<String, String>> map) throws Exception;
+	
 }
