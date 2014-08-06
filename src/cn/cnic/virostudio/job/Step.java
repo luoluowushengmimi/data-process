@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.apache.log4j.Logger;
 
 import virtuoso.jena.driver.VirtGraph;
@@ -62,20 +60,6 @@ public class Step {
 		this.dataWriter = dataWriter;
 	}
 
-//	public int doStep(int filenumber) {
-//		int count = 0;
-//		//loginfo.info("传入的filenumber----------------------- :"+filenumber);
-//		List<Multimap<String, String>> result = dataReader.getQueryResult();
-//		for (int i = 0; i < result.size(); i++) {
-//			count++;
-//			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
-//			//loginfo.info("最终确定的filenumber----------------------- :"+filenumber);
-//			new SingleThread(filenumber, dataWriter.getIdname(), result.get(i),
-//					processor, dataWriter).run();
-//		}
-//		System.gc();
-//		return count;
-//	}
 
 	public int getFileId(String filepath, int filenumber) {
 		if (!filepath.endsWith("/"))
