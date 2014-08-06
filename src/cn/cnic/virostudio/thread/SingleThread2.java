@@ -19,7 +19,6 @@ public class SingleThread2 {
 	private ArrayList<Multimap<String, String>>listmap;
 	private CompositeProcessor processor;
 	private DataWriter dataWriter;
-	//private ConstructTriples constructTriples;
 	private static Logger logerr = Logger.getLogger("errLog");
 	private static Logger loginfo = Logger.getLogger("infoLog");
 
@@ -70,34 +69,20 @@ public class SingleThread2 {
 		this.dataWriter = dataWriter;
 	}
 
-//	public ConstructTriples getConstructTriples() {
-//		return constructTriples;
-//	}
-//
-//	public void setConstructTriples(ConstructTriples constructTriples) {
-//		this.constructTriples = constructTriples;
-//	}
 
 	public void run() throws Exception {
 		ArrayList<Multimap<String, String>> listmap=this.AfterProcessMaps();
 		dataWriter.write(fileId, listmap);
 	}
 	
-//	public List<Triple> constructTriples(){
-//		ArrayList<Triple> list=new ArrayList<Triple>();
-//		for(Multimap<String, String> map:listmap){
-//			Multimap<String, String> processmap=processor.process(map);
-//			List<Triple> listp=constructTriples.constructTriplesFromOneMap(processmap);
-//			list.addAll(listp);
-//		}
-//		return list;
-//	}
 	
 	public ArrayList<Multimap<String, String>> AfterProcessMaps(){
+		int counts=0;
 		ArrayList<Multimap<String, String>> maps=new ArrayList<Multimap<String, String>>();
 		for(Multimap<String, String> map:listmap){
+			counts++;
 			Multimap<String, String> processmap=processor.process(map);
-			//List<Triple> listp=constructTriples.constructTriplesFromOneMap(processmap);
+			loginfo.info("处理后的map：  "+processmap);
 			maps.add(processmap);
 		}
 		return maps;
