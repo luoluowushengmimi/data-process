@@ -12,7 +12,7 @@ public class ConstructTripleRule {
 		return keys;
 	}
 
-	public void setKey(List<String> keys) {
+	public void setKeys(List<String> keys) {
 		this.keys = keys;
 	}
 
