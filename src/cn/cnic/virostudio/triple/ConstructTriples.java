@@ -20,20 +20,8 @@ public class ConstructTriples {
 		this.rules = rules;
 	}
 	
-//	public List<Triple> constructTriplesFromOneMap(Multimap<String, String> map){
-//		ArrayList<Triple> list=new ArrayList<Triple>();
-//		for(ConstructTripleRule rule:rules){
-//			ArrayList<String> keyList=(ArrayList<String>) rule.getKeys();
-//			for(String key:keyList){
-//					list.add(this.constructTriple(map, key, rule));
-//			}
-//		}
-//		return list;
-//	}
-//	
    public Triple constructTriple(Multimap<String, String> map,String key,ConstructTripleRule rule){
 		String id=map.get(rule.getIdname()).iterator().next().replace("\"", "");
-		loginfo.info("id:   "+id);
 		String subject=rule.getSprefix()+id;
 		Triple triple=new Triple(subject,key,map.get(key).iterator().next());
 		return triple;
