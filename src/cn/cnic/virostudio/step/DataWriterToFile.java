@@ -6,13 +6,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFFormat;
 import org.apache.log4j.Logger;
 import org.springframework.batch.item.util.FileUtils;
+
+import cn.cnic.virostudio.triple.Triple;
+
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.TreeMultimap;
@@ -203,6 +208,12 @@ public class DataWriterToFile implements DataWriter {
 		Model model = ModelFactory.createDefaultModel();
 		model.setNsPrefixes(namespace);
 		return model;
+	}
+
+	@Override
+	public void write(int fileId, ArrayList<Multimap<String, String>> map) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
