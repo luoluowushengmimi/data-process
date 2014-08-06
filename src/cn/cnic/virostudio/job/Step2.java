@@ -100,8 +100,8 @@ public class Step2 {
 					nodevalue=nodevalue.substring(0, nodevalue.length()-1);
 				}
 				resultmap.put(name, nodevalue);
-				listmap.add(resultmap);
 			}
+			listmap.add(resultmap);
 			if(count%5000==0){
 			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
 			new SingleThread2(filenumber, listmap,processor, dataWriter).run();
