@@ -12,8 +12,9 @@ public class StartCompound {
 
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "compound-job.xml" });
 		Step step = context.getBean("step", Step.class);

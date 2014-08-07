@@ -9,7 +9,7 @@ import cn.cnic.virostudio.job.Step;
 public class StartGene {
 	private static Logger logerr = Logger.getLogger("errLog");
 	private static Logger loginfo = Logger.getLogger("infoLog");
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 //		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 //				new String[] { "gene-job-one.xml"});
 //		JobController job = context.getBean("job", JobController.class);

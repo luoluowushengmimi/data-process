@@ -11,8 +11,9 @@ public class StartPathway {
 	private static Logger loginfo = Logger.getLogger("infoLog");
 	/**
 	 * @param args
+	 * @throws Exception 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 //		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 //				new String[] { "pathway-job.xml" });
 //		JobController job = context.getBean("job", JobController.class);
