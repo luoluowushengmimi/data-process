@@ -23,7 +23,7 @@ public class JobController {
 		int filenumber=0;
 		log.info("进入到总控程序");
 		while(true){
-			int count=step.doStep(filenumber);
+			long count=step.doStep(filenumber);
 		int limit=step.getDataReader().getLimit();
 		
 		if(count<limit){
