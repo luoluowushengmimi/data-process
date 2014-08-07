@@ -76,8 +76,8 @@ public class Step {
 		}
 	}
 	
-	public  int doStep(int filenumber) throws Exception{
-		int count = 0;
+	public  long doStep(int filenumber) throws Exception{
+		long count = 0;
 		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
 		String query=null;
 	if(dataReader.getLimit()==0&&dataReader.getOffset()==0){
