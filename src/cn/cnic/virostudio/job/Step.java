@@ -79,7 +79,7 @@ public class Step {
 	public  int doStep(int filenumber){
 		int count = 0;
 		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
-		//String query=selectClause+" from "+"<"+dataBase+">"+" "+whereClause+" limit "+limit+" offset "+offset;
+		//String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
 		String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
 		loginfo.info(query);
 				//Query sparql = QueryFactory.create("SELECT * from <test> WHERE {  ?s ?p ?o  } limit 100");
@@ -88,6 +88,7 @@ public class Step {
 		ResultSet results = vqe.execSelect();
 		loginfo.info("测试应该是读取成功");
 		while (results.hasNext()) {
+			loginfo.info("程序跑到第"+count+"个");
 			count++;
 			Multimap<String, String> resultmap = ArrayListMultimap.create();
 			QuerySolution result = results.nextSolution();
