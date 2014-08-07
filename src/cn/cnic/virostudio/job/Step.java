@@ -76,11 +76,20 @@ public class Step {
 		}
 	}
 	
-	public  int doStep(int filenumber){
+	public  int doStep(int filenumber) throws Exception{
 		int count = 0;
 		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
-		String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
+		String query=null;
+	if(dataReader.getLimit()==0&&dataReader.getOffset()==0){
+		query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
+	}
+	else if(dataReader.getLimit()!=0&&dataReader.getOffset()!=0) {
+		query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause()+" limit "+dataReader.getLimit()+" offset "+dataReader.getOffset();
+	}
 		loginfo.info(query);
+		if(query==null){
+			throw new Exception("查询语句有错误，请重新配置，主要是limit和offset,这个语句的规则是limit 和offset要么都设置，要么都不设置");
+		}
 		Query sparql = QueryFactory.create(query);
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
 		ResultSet results = vqe.execSelect();
