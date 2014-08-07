@@ -90,7 +90,6 @@ public class DataWriterToFile implements DataWriter {
 		Model model = this.constructFileContent(id, map);
 		File directory = new File(filePath);
 		if (!directory.exists()) {
-			loginfo.info("创建文件夹： "+filePath);
 			directory.mkdirs();
 		}
 		if (filePath.endsWith("/")) {
@@ -99,7 +98,6 @@ public class DataWriterToFile implements DataWriter {
 		File file = new File(filePath + "/" + fileId+".nt");
 		FileOutputStream fout;
 		try {
-			loginfo.info("创建文件： "+filePath + "/" + fileId+".nt");
 			fout = new FileOutputStream(file, true);
 			RDFDataMgr.write(fout, model, RDFFormat.NT);
 			try {
