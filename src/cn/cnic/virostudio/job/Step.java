@@ -79,10 +79,8 @@ public class Step {
 	public  int doStep(int filenumber){
 		int count = 0;
 		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
-		//String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
 		String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
 		loginfo.info(query);
-				//Query sparql = QueryFactory.create("SELECT * from <test> WHERE {  ?s ?p ?o  } limit 100");
 		Query sparql = QueryFactory.create(query);
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
 		ResultSet results = vqe.execSelect();
