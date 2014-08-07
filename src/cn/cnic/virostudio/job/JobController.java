@@ -17,8 +17,9 @@ public class JobController {
 	
 	/**
 	 * 主控程序
+	 * @throws Exception 
 	 */
-	public void doListener(){
+	public void doListener() throws Exception{
 		int filenumber=0;
 		log.info("进入到总控程序");
 		while(true){
