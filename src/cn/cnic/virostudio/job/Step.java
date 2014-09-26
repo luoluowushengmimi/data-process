@@ -30,11 +30,21 @@ import cn.cnic.virostudio.thread.SingleThread;
  * 
  */
 public class Step {
+	private DataReader predatareader;
 	private DataReader dataReader;
 	private CompositeProcessor processor;
 	private DataWriter dataWriter;
 	private static Logger logerr = Logger.getLogger("errLog");
 	private static Logger loginfo = Logger.getLogger("infoLog");
+
+	
+	public DataReader getPredatareader() {
+		return predatareader;
+	}
+
+	public void setPredatareader(DataReader predatareader) {
+		this.predatareader = predatareader;
+	}
 
 	public DataReader getDataReader() {
 		return dataReader;
@@ -80,22 +90,56 @@ public class Step {
 		long count = 0;
 		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
 		String query=null;
-	if(dataReader.getLimit()==0&&dataReader.getOffset()==0){
-		query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
-	}
-	else if(dataReader.getLimit()!=0&&dataReader.getOffset()!=0) {
-		query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause()+" limit "+dataReader.getLimit()+" offset "+dataReader.getOffset();
-	}
-		loginfo.info(query);
-		if(query==null){
-			throw new Exception("查询语句有错误，请重新配置，主要是limit和offset,这个语句的规则是limit 和offset要么都设置，要么都不设置");
+		ArrayList<Multimap<String, String>> maps=this.getPrequery();
+		for(Multimap<String, String> map:maps){
+			 System.out.println(map.get("s"));
+			 String s=map.get("s").toString().replaceAll("\\[", "<").replaceAll("\\]", ">");
+			 query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+ dataReader.getWhereClause().replace("?s", s);;
+			 loginfo.info("dostep:"+query);
+			 Query sparql = QueryFactory.create(query);
+				VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
+				ResultSet results = vqe.execSelect();
+				loginfo.info("测试应该是读取成功");
+				while (results.hasNext()) {
+					loginfo.info("程序跑到第"+count+"个");
+					count++;
+					Multimap<String, String> resultmap = ArrayListMultimap.create();
+					QuerySolution result = results.nextSolution();
+					Iterator<String> iter=result.varNames();
+					while(iter.hasNext()){
+						String name=iter.next();
+						RDFNode node=result.get(name);
+						String nodevalue=node.toString();
+						if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
+							nodevalue=nodevalue.substring(0, nodevalue.length()-1);
+						}
+						resultmap.put(name, nodevalue);
+					}
+					filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+					System.out.println(resultmap);
+					new SingleThread(filenumber, dataWriter.getIdname(),resultmap,
+							processor, dataWriter).run();
+				}
+				vqe.close();
 		}
+				set.close();
+		
+		return count;
+	}
+	
+	public ArrayList<Multimap<String, String>>  getPrequery(){
+		long count = 0;
+		ArrayList<Multimap<String, String>> maps=new ArrayList<Multimap<String, String>>();
+		VirtGraph set = new VirtGraph (predatareader.getDataSource(), predatareader.getUserName(), predatareader.getPassWord());
+		String query=predatareader.getSelectClause()+" from "+"<"+predatareader.getDataBase()+">"+" "+predatareader.getWhereClause();
+		
+		loginfo.info("prequery:"+query);
 		Query sparql = QueryFactory.create(query);
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
 		ResultSet results = vqe.execSelect();
 		loginfo.info("测试应该是读取成功");
 		while (results.hasNext()) {
-			loginfo.info("程序跑到第"+count+"个");
+			loginfo.info("prequery 程序跑到第"+count+"个");
 			count++;
 			Multimap<String, String> resultmap = ArrayListMultimap.create();
 			QuerySolution result = results.nextSolution();
@@ -107,15 +151,15 @@ public class Step {
 				if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
 					nodevalue=nodevalue.substring(0, nodevalue.length()-1);
 				}
+				loginfo.info("premap "+" name: " +name+" nodevalue: "+nodevalue);
 				resultmap.put(name, nodevalue);
 			}
-			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
-			System.out.println(resultmap);
-			new SingleThread(filenumber, dataWriter.getIdname(),resultmap,
-					processor, dataWriter).run();
+			
+			maps.add(resultmap);
 		}
 		vqe.close();
 		set.close();
-		return count;
+		return maps;
 	}
+	
 }
