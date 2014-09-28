@@ -3,6 +3,7 @@ package cn.cnic.virostudio;
 import java.util.HashMap;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
@@ -94,12 +95,12 @@ public class ProcessTest {
 	}
 	
 	public void keggenzymeTest() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				new String[] { "enzyme-job.xml" });
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
 		resultmap.put("enzymeId", "1.1.1.1");
 		resultmap.put("enzymeName", "ADH");
-		resultmap.put("sysname", "alcohol:NAD+ oxidoreductase");
+		resultmap.put("sysname", "");
 		resultmap.put("class", "Oxidoreductases;Acting on the CH-OH group of donors;With NAD+ or NADP+ as acceptor");
 		resultmap.put("reactionSource", "http://bds.csdb.cn/material/kegg/reaction/R07326");
 		resultmap.put("substrate", "http://bds.csdb.cn/material/kegg/compound/C00003");
@@ -107,10 +108,6 @@ public class ProcessTest {
 		resultmap.put("comment", "A zinc protein. Acts on primary or secondary alcohols or hemi-acetals with very broad");
 		resultmap.put("history", "EC 1.1.1.1 created 1961, modified 2011");
 		resultmap.put("keggGeneStdId", "hsa:124");
-		System.out.println("before process " + resultmap);
-		CompositeProcessor processor = context.getBean("main-processor",
-				CompositeProcessor.class);
-		System.out.println("afer process " + processor.process(resultmap));
 	}
 
 	

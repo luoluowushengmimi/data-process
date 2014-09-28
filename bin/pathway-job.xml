@@ -4,14 +4,23 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-	<bean id="job" class="cn.cnic.virostudio.job.JobController">
-		<property name="step" ref="step" />
-	</bean>
 	<bean id="step" class="cn.cnic.virostudio.job.Step">
+	    <property name="predatareader" ref="predatareader"></property>
 		<property name="dataReader" ref="datareader" />
 		<property name="processor" ref="main-processor" />
 		<property name="dataWriter" ref="datawriter" />
 	</bean>
+	<bean id="predatareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+	  <property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="SELECT distinct ?s" />
+		<property name="whereClause"
+		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.}"/>
+	</bean>
+	
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
 		<property name="dataBase" value="material"></property>
@@ -20,14 +29,12 @@
 		<property name="selectClause"
 			value="SELECT distinct ?pathwayId ?pathwayName ?class ?enzymeSource ?pathwayKoSource ?compoundSource ?diseaseSource ?pmid ?keggGeneStdId" />
 		<property name="whereClause"
-		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class. optional{?s &lt;http://bds.csdb.cn/material/kegg/enzymeSource> ?enzymeSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reference> ?reference . ?reference &lt;http://bds.csdb.cn/material/kegg/pmid> ?pmid.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource. ?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}"/>
-		<property name="limit" value="50000" />
-		<property name="offset" value="0" />
+		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class. optional{?s &lt;http://bds.csdb.cn/material/kegg/enzymeSource> ?enzymeSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reference> ?reference. ?reference &lt;http://bds.csdb.cn/material/kegg/pmid> ?pmid.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource. ?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}"/>
 	</bean>
 
 
 	<bean id="source" class="java.lang.String">
-		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/pathway/" />

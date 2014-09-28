@@ -149,12 +149,10 @@ SELECT distinct ?pathwayId ?pathwayName ?class ?enzymeSource ?pathwayKoSource ?c
  optional{?s <http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} 
  optional{?s <http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} 
 optional{?s <http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.}
-optional{?s <http://bds.csdb.cn/material/kegg/reference> ?reference .
-?reference <http://bds.csdb.cn/material/kegg/pmid> ?pmid .
+optional{?s <http://bds.csdb.cn/material/kegg/reference> ?reference.
+?reference <http://bds.csdb.cn/material/kegg/pmid> ?pmid.
 }
-optional{?s <http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.
-?keggGeneSource <http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.
-}
+
 }
 
 1978529128
@@ -200,3 +198,6 @@ WHERE {
  prefix kegg:<http://bds.csdb.cn/material/kegg/>
 SELECT ?s ?p ?o 
 WHERE  { ?s kegg:keggGeneId "51166";?p ?o} limit 10
+
+
+cd /usr/lib/node_modules/mongo-express

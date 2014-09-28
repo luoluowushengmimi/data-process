@@ -6,7 +6,7 @@ echo "starting ${PNAME}"
 pid=`ps -ef | grep java | grep "${PNAME}" | awk '{print $2}'`
 
 if [ "a$pid" = "a" ]; then 
-	nohup java -Denv=${ENV} -Dn=${PNAME} -Xmx4000m  -cp ./:./conf/:./lib/* cn.cnic.virostudio.ReStartGenebank >stdout 2>stderr &
+	nohup java -Denv=${ENV} -Dn=${PNAME} -Xmx4000m  -cp ./:./conf/:./lib/* cn.cnic.virostudio.RestartGenebank >stdout 2>stderr &
 	echo "started ${PNAME} Entire."
 	exit 0
 fi
