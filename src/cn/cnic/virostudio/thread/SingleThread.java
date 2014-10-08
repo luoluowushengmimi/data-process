@@ -51,9 +51,7 @@ public class SingleThread {
 		this.dataWriter = dataWriter;
 	}
 	public void run() {
-		loginfo.info("before process map: "+map );
 		Multimap<String, String> processmap=processor.process(map);
-		loginfo.info("after process map: "+processmap );
 		if(processmap==null) return;
 		String id=processmap.get(idname).iterator().next();
 		//loginfo.info("id: "+id );
