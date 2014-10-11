@@ -45,6 +45,10 @@ query:
  ?nameEntry &lt;http://bds.csdb.cn/material/taxonomy/taxname> ?taxname.
  } limit 100 offset 0
  
+ prefix taxon:<http://bds.csdb.cn/material/taxonomy/>
+SELECT ?s ?p ?o
+WHERE  { ?s taxon:taxid  "1" ;?p ?o} 
+ 
  处理基因的时候需要做两次查询，第一次需要先查询genome数据
  
  gene query clause:
