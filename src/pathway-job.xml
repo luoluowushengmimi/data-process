@@ -5,10 +5,14 @@
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 	<bean id="step" class="cn.cnic.virostudio.job.Step">
-	    <property name="predatareader" ref="predatareader"></property>
+	    <property name="prestep" ref="prestep"></property>
 		<property name="dataReader" ref="datareader" />
 		<property name="processor" ref="main-processor" />
 		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="prestep" class="cn.cnic.virostudio.job.PreStep">
+		<property name="dataReader" ref="predatareader" />
+		<property name="dataWriter" ref="predatawriter" />
 	</bean>
 	<bean id="predatareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 	  <property name="dataSource" ref="source" />
@@ -20,7 +24,9 @@
 		<property name="whereClause"
 		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.}"/>
 	</bean>
-	
+	<bean id="predatawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/pathway/subjectlists" />
+	</bean>
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
 		<property name="dataBase" value="material"></property>
