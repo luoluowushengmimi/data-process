@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
 import virtuoso.jena.driver.VirtGraph;
@@ -30,7 +32,8 @@ import cn.cnic.virostudio.thread.SingleThread;
  * 
  */
 public class Step {
-	private DataReader predatareader;
+	//private DataReader predatareader;
+	private PreStep prestep;
 	private DataReader dataReader;
 	private CompositeProcessor processor;
 	private DataWriter dataWriter;
@@ -38,13 +41,13 @@ public class Step {
 	private static Logger loginfo = Logger.getLogger("infoLog");
 
 	
-	public DataReader getPredatareader() {
-		return predatareader;
-	}
-
-	public void setPredatareader(DataReader predatareader) {
-		this.predatareader = predatareader;
-	}
+//	public DataReader getPredatareader() {
+//		return predatareader;
+//	}
+//
+//	public void setPredatareader(DataReader predatareader) {
+//		this.predatareader = predatareader;
+//	}
 
 	public DataReader getDataReader() {
 		return dataReader;
@@ -70,6 +73,15 @@ public class Step {
 		this.dataWriter = dataWriter;
 	}
 
+	public PreStep getPrestep() {
+		return prestep;
+	}
+
+	public void setPrestep(PreStep prestep) {
+		this.prestep = prestep;
+	}
+	
+	
 
 	public int getFileId(String filepath, int filenumber) {
 		if (!filepath.endsWith("/"))
@@ -87,16 +99,31 @@ public class Step {
 	}
 	
 	public  long doStep(int filenumber) throws Exception{
+		if(prestep==null){
+			return this.stepCaseOther(filenumber);
+		}
+		else{
+			return this.stepCase(filenumber);
+		}
+	}
+	/**
+	 * stepcase 要做的事情是先读出s,然后再通过s构建新的查询语句，进行数据的处理工作。所以会有一个prestep的过程
+	 * @param filenumber
+	 * @return
+	 * @throws Exception
+	 */
+	public  long stepCase(int filenumber) throws Exception{
 		long count = 0;
 		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
-		String query=null;
-		ArrayList<Multimap<String, String>> maps=this.getPrequery();
-		for(Multimap<String, String> map:maps){
-			 System.out.println(map.get("s"));
-			 String s=map.get("s").toString().replaceAll("\\[", "<").replaceAll("\\]", ">");
-			 query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+ dataReader.getWhereClause().replace("?s", s);;
-			 loginfo.info("dostep:"+query);
-			 Query sparql = QueryFactory.create(query);
+		prestep.doPreStep();
+		List<String> sublists=FileUtils.readLines(new File(prestep.getDataWriter().getFilePath()));
+		List<String> transferlist = new ArrayList<String>();
+		for(String s:sublists){
+			  String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause().replace("?s", s);
+			  //transferlist.add(query);
+			  FileUtils.write(new File(dataWriter.getFilePath()+"/"+"querylist.txt"), query+"\r\n", true);
+			  loginfo.info("dostep query:"+query);
+			  Query sparql = QueryFactory.create(query);
 				VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
 				ResultSet results = vqe.execSelect();
 				loginfo.info("测试应该是读取成功");
@@ -121,25 +148,71 @@ public class Step {
 							processor, dataWriter).run();
 				}
 				vqe.close();
+				loginfo.info("已经处理完成查询语句为： "+query+" 的所有数据");
 		}
-				set.close();
+		set.close();
 		
+//		for(String query:transferlist){
+//			loginfo.info("dostep:"+query);
+//			 Query sparql = QueryFactory.create(query);
+//				VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
+//				ResultSet results = vqe.execSelect();
+//				loginfo.info("测试应该是读取成功");
+//				while (results.hasNext()) {
+//					loginfo.info("程序跑到第"+count+"个");
+//					count++;
+//					Multimap<String, String> resultmap = ArrayListMultimap.create();
+//					QuerySolution result = results.nextSolution();
+//					Iterator<String> iter=result.varNames();
+//					while(iter.hasNext()){
+//						String name=iter.next();
+//						RDFNode node=result.get(name);
+//						String nodevalue=node.toString();
+//						if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
+//							nodevalue=nodevalue.substring(0, nodevalue.length()-1);
+//						}
+//						resultmap.put(name, nodevalue);
+//					}
+//					filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+//					System.out.println(resultmap);
+//					new SingleThread(filenumber, dataWriter.getIdname(),resultmap,
+//							processor, dataWriter).run();
+//				}
+//				vqe.close();
+//				//loginfo.info("已经处理完成查询语句为： "+query+" 的所有数据");
+//		}
+//		
+//				set.close();
+//		
 		return count;
-	}
-	
-	public ArrayList<Multimap<String, String>>  getPrequery(){
-		long count = 0;
-		ArrayList<Multimap<String, String>> maps=new ArrayList<Multimap<String, String>>();
-		VirtGraph set = new VirtGraph (predatareader.getDataSource(), predatareader.getUserName(), predatareader.getPassWord());
-		String query=predatareader.getSelectClause()+" from "+"<"+predatareader.getDataBase()+">"+" "+predatareader.getWhereClause();
 		
-		loginfo.info("prequery:"+query);
+	}
+	/**
+	 * 这段代码说的是step的另外一种情况，就是没有prestep,那么就是通过构建查询条件进行查询，只需要进行一次查询即可。
+	 * @param filenumber
+	 * @return
+	 * @throws Exception
+	 */
+	public  long stepCaseOther(int filenumber) throws Exception{
+		long count = 0;
+		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
+		String query=null;
+	if(dataReader.getLimit()==0&&dataReader.getOffset()==0){
+		query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
+	}
+	else if(dataReader.getLimit()!=0&&dataReader.getOffset()!=0) {
+		query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause()+" limit "+dataReader.getLimit()+" offset "+dataReader.getOffset();
+	}
+		loginfo.info(query);
+		if(query==null){
+			throw new Exception("查询语句有错误，请重新配置，主要是limit和offset,这个语句的规则是limit 和offset要么都设置，要么都不设置");
+		}
 		Query sparql = QueryFactory.create(query);
 		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
 		ResultSet results = vqe.execSelect();
 		loginfo.info("测试应该是读取成功");
 		while (results.hasNext()) {
-			loginfo.info("prequery 程序跑到第"+count+"个");
+			loginfo.info("程序跑到第"+count+"个");
 			count++;
 			Multimap<String, String> resultmap = ArrayListMultimap.create();
 			QuerySolution result = results.nextSolution();
@@ -151,15 +224,15 @@ public class Step {
 				if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
 					nodevalue=nodevalue.substring(0, nodevalue.length()-1);
 				}
-				loginfo.info("premap "+" name: " +name+" nodevalue: "+nodevalue);
 				resultmap.put(name, nodevalue);
 			}
-			
-			maps.add(resultmap);
+			filenumber=this.getFileId(dataWriter.getFilePath(), filenumber);
+			System.out.println(resultmap);
+			new SingleThread(filenumber, dataWriter.getIdname(),resultmap,
+					processor, dataWriter).run();
 		}
 		vqe.close();
 		set.close();
-		return maps;
+		return count;
 	}
-	
 }
