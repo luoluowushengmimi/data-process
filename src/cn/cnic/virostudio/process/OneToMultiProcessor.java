@@ -12,7 +12,15 @@ import cn.cnic.virostudio.rule.MatchRule;
 import cn.cnic.virostudio.rule.ModifyData;
 
 import com.google.common.collect.Multimap;
-
+/**
+ * 这个类是这样的，具体需求是在compound数据 remark字段，由于郭没有完全把数据打散造成的
+ * 首先在处理的时候配置文件已经将"Same as: "去掉，并且去掉了前后引号，以空格作为了splitTag,
+ *将数据 "Same as: D02324 G00316 G07287 G07471 G08476 G10593" 打散成了
+ *[D02324,G00316,G07287,G07471,G08476,G10593] 对这个数组里面的每一个内容进行过滤和判断条件，满足条件a 将数据组里的数据转换成什么，满足条件b，将数据里满足条件的内容转化成什么，具体的
+ *内容，请详见compound-job的配置。
+ * @author lenovo
+ *
+ */
 public class OneToMultiProcessor extends AbstractProcessor {
 
 	private MatchRule matchRule;
