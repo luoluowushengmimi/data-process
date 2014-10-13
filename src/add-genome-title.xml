@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="http://gcm.wfcc.info/"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="SELECT distinct ?s ?comment" />
+		<property name="whereClause" value="{?s &lt;http://www.w3.org/2000/01/rdf-schema#comment> ?comment. ?s &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type. FILTER (regex(?type, &lt;http://gcm.wfcc.info/type/genome>))}"/>
+	</bean>
+        
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.14:1111" />
+	</bean>
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/title/genome/" />
+		<property name="ignorekey" value="s"></property>
+		<property name="idname" value="s" />
+		<property name="namespace">
+			<map>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor">
+				<property name="conditions">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
+
+		<property name="processors">
+			<list>
+				<ref bean="comment-processor"/>
+			</list>
+		</property>
+
+		<property name="postProcessor">
+			<bean class="cn.cnic.virostudio.process.PostProcessor">
+				<property name="removeKeys">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="comment-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="comment" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:title" />
+			</bean>
+		</property>
+	</bean>
+</beans>
