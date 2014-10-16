@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value=" select ?goId ?goName ?goNameSpace ?comment ?relationshipGoSource ?relationshipType" />
+		<property name="whereClause"
+		 value="where{?s &lt;http://bds.csdb.cn/material/go/goId> ?goId. ?s &lt;http://bds.csdb.cn/material/go/goName> ?goName. ?s &lt;http://bds.csdb.cn/material/go/goNameSpace> ?goNameSpace. ?s &lt;http://bds.csdb.cn/material/go/comment> ?comment. optional{ ?s &lt;http://bds.csdb.cn/material/go/relationship> ?relationship. ?relationship &lt;http://bds.csdb.cn/material/go/relationshipGoSource> ?relationshipGoSource. ?relationship &lt;http://bds.csdb.cn/material/go/relationshipType> ?relationshipType.}}"></property>		
+	</bean>
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
+	</bean>
+
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor" >
+			<property name="conditions">
+			 <list></list>
+			</property>
+			</bean>
+		</property>
+		<property name="processors">
+			<list>
+				<ref bean="switch-processor" />
+				<ref bean="goId-processor" />
+				<ref bean="goName-processor" />
+				<ref bean="goNameSpace-processor" />
+				<ref bean="comment-processor"/>
+				<ref bean="add-typeproperty-processor"/>
+				<ref bean="add-orientproperty-processor"/>
+			</list>
+		</property>
+		<property name="postProcessor">
+		   <bean class="cn.cnic.virostudio.process.PostProcessor">
+			  <property name="removeKeys">
+			    <list>
+			       <value>relationshipGoSource</value>
+			       <value>relationshipType</value>
+			    </list>
+			  </property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="goId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="goId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:label" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="goName-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="goName" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="go:name" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="goNameSpace-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="goNameSpace" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="go:hasNamespace" />
+			</bean>
+		</property>
+	</bean>
+
+    <bean id="comment-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="comment" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:comment" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
+		<property name="processors">
+			<list>
+				<ref bean="isa-processor" />
+				<ref bean="partof-processor" />
+			</list>
+		</property>
+	</bean>
+	<bean id="isa-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="relationshipType" />
+					<property name="ofilter" value="(^(is_a))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="relationshipGoSource" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="go:is_a" />
+				<property name="content" value="relationshipGoSource.value" />
+				<property name="otrim" value="http://bds.csdb.cn/material/go/"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="partof-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="relationshipType" />
+					<property name="ofilter" value="(^(part_of))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="relationshipGoSource" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="go: part_of" />
+				<property name="content" value="relationshipGoSource.value" />
+				<property name="otrim" value="http://bds.csdb.cn/material/go/"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/go/"></property>
+		<property name="sprefix" value="http://gcm.wfcc.info/go/"></property>
+		<property name="idname" value="rdfs:label"></property>
+		<property name="namespace">
+			<map>
+				<entry key="rdf">
+					<value>http://www.w3.org/1999/02/22-rdf-syntax-ns#</value>
+				</entry>
+				<entry key="rdfs">
+					<value>http://www.w3.org/2000/01/rdf-schema#</value>
+				</entry>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+				<entry key="go">
+					<value>http://gcm.wfcc.info/go/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="go:name" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:title" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="rdfs:label" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:source" />
+				<property name="oprefix" value="http://bds.csdb.cn/material/go/" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+			  <property name="pname" value="" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdf:type" />
+				<property name="content" value="http://gcm.wfcc.info/type/go/" />
+			</bean>
+		</property>
+	</bean>
+</beans>
