@@ -48,6 +48,9 @@ public class CombineProcessor extends AbstractProcessor{
 		else{
 			value=change.getContent().replace(change.otrim, "");
 		}
+		if(change.oprefix!=null&&""!=change.oprefix){
+			value=change.oprefix+value;
+		}
 		input.put(pnewname, this.constructObjectThroughOtype(value));
 		return this.deleteOrientedKeys(input);
 		//return input;
