@@ -21,17 +21,15 @@
 			value="SELECT distinct ?reactionId ?reactionName ?definition ?equation ?comment" />
 		<property name="whereClause"
 		  value=" where { ?s &lt;http://bds.csdb.cn/material/kegg/reactionId> ?reactionId. ?s &lt;http://bds.csdb.cn/material/kegg/reactionName> ?reactionName. optional{?s &lt;http://bds.csdb.cn/material/kegg/definition> ?definition.} optional{?s &lt;http://bds.csdb.cn/material/kegg/equation> ?equation.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} "/>
-		<property name="limit" value="50000" />
-		<property name="offset" value="0" />
 	</bean>
 
 
 	<bean id="source" class="java.lang.String">
-		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/reaction/" />
-		<property name="sprefix" value="http://gcm.wfcc.info/keggcompound/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/keggreaction/" />
 		<property name="idname" value="rdfs:label" />
 		<property name="namespace">
 			<map>
