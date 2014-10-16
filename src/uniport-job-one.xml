@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="meterial"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="SELECT distinct ?uniprotId ?dblinktype ?dblinkVal ?accessionNumber ?description ?taxid ?seqlength ?sequenceTxt" />
+		<property name="whereClause"
+			value="where { ?s &lt;http://bds.csdb.cn/material/uniprot/uniprotId> ?uniprotId. ?s &lt;http://bds.csdb.cn/material/uniprot/dblink> ?dblink. ?dblink &lt;http://bds.csdb.cn/material/uniprot/dblinkType> ?dblinktype. ?dblink &lt;http://bds.csdb.cn/material/uniprot/dblinkVal> ?dblinkVal. ?s	&lt;http://bds.csdb.cn/material/uniprot/accessionNumber> ?accessionNumber. ?s &lt;http://bds.csdb.cn/material/uniprot/description> ?description. ?s	&lt;http://bds.csdb.cn/material/uniprot/taxid> ?taxid. ?s &lt;http://bds.csdb.cn/material/uniprot/sequence> ?sequence. ?sequence &lt;http://bds.csdb.cn/material/uniprot/seqLength> ?seqlength. ?sequence &lt;http://bds.csdb.cn/material/uniprot/sequenceTxt> ?sequenceTxt.}" />
+	</bean>
+
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
+	</bean>
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/uniport/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/protein/" />
+		<property name="idname" value="rdfs:label" />
+		<property name="namespace">
+			<map>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+				<entry key="rdf">
+					<value>http://www.w3.org/1999/02/22-rdf-syntax-ns#</value>
+				</entry>
+				<entry key="rdfs">
+					<value>http://www.w3.org/2000/01/rdf-schema#</value>
+				</entry>
+				<entry key="up">
+					<value>http://purl.uniprot.org/core/</value>
+				</entry>
+				<entry key="dwc">
+					<value>http://rs.tdwg.org/dwc/terms/</value>
+				</entry>
+				<entry key="GeneID">
+					<value>http://gcm.wfcc.info/gene/</value>
+				</entry>
+				<entry key="GCM">
+					<value>http://gcm.wdcm.org/gcm/</value>
+				</entry>
+				<entry key="taxon">
+					<value>http://gcm.wfcc.info/taxonomy/</value>
+				</entry>
+				<entry key="genome">
+					<value>http://gcm.wfcc.info/taxonomy/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor">
+				<property name="conditions">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
+
+		<property name="processors">
+			<list>
+				<ref bean="uniprotId-processor" />
+				<ref bean="accessionNumber-processor" />
+				<ref bean="description-processor" />
+				<ref bean="taxid-processor" />
+				<ref bean="switch-processor" />
+				<ref bean="seqlength-processor" />
+				<ref bean="sequenceTxt-processor"/>
+				<ref bean="add-title-processor"/>
+				<ref bean="add-typeproperty-processor" />
+				<ref bean="add-orientproperty-processor" />
+			</list>
+		</property>
+		
+		<property name="postProcessor">
+			<bean class="cn.cnic.virostudio.process.PostProcessor">
+			  <property name="removeKeys">
+			    <list>
+			      <value>dblinktype</value>
+			      <value>dblinkVal</value>
+			    </list>
+			  </property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="uniprotId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="uniprotId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:label" />
+				<property name="oprefix" value="http://gcm.wfcc.info/protein/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="accessionNumber-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="accessionNumber" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:uniprotacc" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="description-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="description" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdfs:comment" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="taxid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="taxid" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="up:organism" />
+				<property name="oprefix" value="http://gcm.wfcc.info/taxonomy/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="seqlength-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="seqlength" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:length" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="sequenceTxt-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="sequenceTxt" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:sequence" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
+		<property name="processors">
+			<list>
+				<ref bean="RefSeq-NC-processor" />
+				<ref bean="GeneID-processor" />
+				<ref bean="Pfam-processor" />
+				<ref bean="GO-processor" />
+				<ref bean="PDB-processor" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="RefSeq-NC-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinktype " />
+					<property name="ofilter" value="(^(RefSeq ))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinkVal" />
+					<property name="ofilter" value="(^(NC))(.*)" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:belongto" />
+				<property name="content" value="dblinkVal.value" />
+				<property name="oprefix" value="http://gcm.wfcc.info/genome/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="GeneID-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinktype " />
+					<property name="ofilter" value="(^(GeneID ))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinkVal" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:codeby" />
+				<property name="content" value="dblinkVal.value" />
+				<property name="oprefix" value="http://gcm.wfcc.info/gene/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="Pfam-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinktype " />
+					<property name="ofilter" value="(^(Pfam ))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinkVal" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:havedomain" />
+				<property name="content" value="dblinkVal.value" />
+				<property name="oprefix" value="http://gcm.wfcc.info/pfam/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="GO-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinktype " />
+					<property name="ofilter" value="(^(GO))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinkVal" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:participatesin" />
+				<property name="content" value="dblinkVal.value" />
+				<property name="oprefix" value="http://gcm.wfcc.info/go/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="PDB-processor" class="cn.cnic.virostudio.process.CombineProcessor">
+		<property name="matchRules">
+			<list>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinktype " />
+					<property name="ofilter" value="(^(PDB))(.*)" />
+				</bean>
+				<bean class="cn.cnic.virostudio.rule.MatchRule">
+					<property name="pname" value="dblinkVal" />
+				</bean>
+			</list>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="GCM:participatesin" />
+				<property name="content" value="dblinkVal.value" />
+				<property name="oprefix" value="http://gcm.wfcc.info/pdb/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	
+	<bean id="add-orientproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="locusId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:source" />
+				<property name="oprefix" value="http://bds.csdb.cn/material/protein/" />
+				<property name="otype" value="uri" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-typeproperty-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="rdf:type" />
+				<property name="content" value="http://gcm.wfcc.info/type/protein" />
+			</bean>
+		</property>
+	</bean>
+</beans>
