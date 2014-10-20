@@ -44,6 +44,7 @@
 				<ref bean="comment-processor"/>
 				<ref bean="add-typeproperty-processor"/>
 				<ref bean="add-orientproperty-processor"/>
+				<ref bean="add-title-processor"/>
 			</list>
 		</property>
 		<property name="postProcessor">
