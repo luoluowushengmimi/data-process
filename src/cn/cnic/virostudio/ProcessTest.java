@@ -22,8 +22,21 @@ public class ProcessTest {
 		//test.taxonomyTest();
 		//test.genebankTest();
 		//test.geneTest();
-		test.keggenzymeTest();
+		//test.keggenzymeTest();
 		//test.keggCompound();
+		//test.addGenomeTitleTest();
+		test.uniprot();
+	}
+	
+	public void addGenomeTitleTest(){
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				new String[] { "add-genome-title.xml" });
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		resultmap.put("s", "http://gcm.wfcc.info/genome/NZ_AABF02000001");
+		resultmap.put("comment", "Fusobacterium nucleatum subsp. vincentii ATCC 49256 Contig0377, whole genome shotgun sequence.");
+		CompositeProcessor processor = context.getBean("main-processor",
+				CompositeProcessor.class);
+		System.out.println("afer process " + processor.process(resultmap));
 	}
 
 	public void genebankTest() {
@@ -113,7 +126,7 @@ public class ProcessTest {
 	
 	public void keggCompound() {
 		ApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "compound-job.xml" });
+				new String[] { "compound-job-two.xml" });
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
 		resultmap.put("compoundId", "C00001");
 		resultmap.put("compoundName", "C00001");
@@ -122,6 +135,28 @@ public class ProcessTest {
 		resultmap.put("exactMass", "506.9957");
 		resultmap.put("molWeight", "507.181");
 		resultmap.put("comment", "Source: Streptomyces tsukubaensis [TAX:83656]4 Pyd is modified by vinyl. (allylmalonyl-CoA extension unit)");
+		System.out.println("before process " + resultmap);
+		CompositeProcessor processor = context.getBean("main-processor",
+				CompositeProcessor.class);
+		System.out.println("afer process " + processor.process(resultmap));
+	}
+	
+	public void uniprot() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				new String[] { "uniprot-job.xml" });
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		resultmap.put("uniprotId", "1A1D_PYRAB");
+		resultmap.put("accessionNumber", "G8ZFP4");
+		resultmap.put("description", "RecName: Full=Putative 1-aminocyclopropane-1-carboxylate deaminase; Short=ACC deaminase; EC=3.5.99.7");
+		resultmap.put("taxid", "272844");
+		resultmap.put("dblinktype", "RefSeq");
+		resultmap.put("dblinkVal", "3625414");
+		//resultmap.put("dblinktype", "GO");
+		//resultmap.put("dblinkVal", "GO:0051536");
+//		resultmap.put("dblinktype", "Pfam");
+//		resultmap.put("dblinkVal", "PF12837");
+//		resultmap.put("dblinktype", "PDB");
+//		resultmap.put("dblinkVal", "1J0A");
 		System.out.println("before process " + resultmap);
 		CompositeProcessor processor = context.getBean("main-processor",
 				CompositeProcessor.class);
