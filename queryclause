@@ -156,10 +156,31 @@ optional{?s <http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.}
 optional{?s <http://bds.csdb.cn/material/kegg/reference> ?reference.
 ?reference <http://bds.csdb.cn/material/kegg/pmid> ?pmid.
 }
-
 }
-
 1978529128
+
+SELECT distinct ?pathwayId ?pathwayName ?class ?enzymeSource ?pathwayKoSource ?compoundSource ?diseaseSource ?pmid ?keggGeneStdId
+where { 
+<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. 
+<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. 
+<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/class> ?class. 
+optional{<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/enzymeSource> ?enzymeSource.} 
+optional{<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/pathwayKoSource> ?pathwayKoSource.} optional{<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/compoundSource> ?compoundSource.} optional{<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/diseaseSource> ?diseaseSource.} 
+optional{<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/reference> ?reference. 
+?reference <http://bds.csdb.cn/material/kegg/pmid> ?pmid.} 
+optional{<http://bds.csdb.cn/material/kegg/pathway/map03320> <http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource. ?keggGeneSource <http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}
+
+
+pathway two
+SELECT  ?s ?organismGn ?taxid
+WHERE {   
+          {?s <http://bds.csdb.cn/material/kegg/organismGn> ?organismGn }UNION
+          {
+          ?xref  <http://bds.csdb.cn/material/dbClass>  'keggpathwayXTaxon' .
+          ?xref <http://bds.csdb.cn/material/kegg/organismGn>  ?organismGn  
+          }
+?xref  <http://bds.csdb.cn/material/kegg/taxid>  ?taxid
+ } limit 10
 
  正则：
      以scientific name开头的任意字符串
@@ -203,5 +224,38 @@ WHERE {
 SELECT ?s ?p ?o 
 WHERE  { ?s kegg:keggGeneId "51166";?p ?o} limit 10
 
+prefix GO:<http://bds.csdb.cn/material/go/>
+SELECT ?s ?p ?o
+WHERE  { ?s GO:goId "GO:0000114" ;?p ?o} 
 
+
+select ?goId ?goName ?goNameSpace ?comment ?relationshipGoSource ?relationshipType
+where{?s <http://bds.csdb.cn/material/go/goId> ?goId. ?s <http://bds.csdb.cn/material/go/goName> ?goName. 
+?s <http://bds.csdb.cn/material/go/goNameSpace> ?goNameSpace.
+?s <http://bds.csdb.cn/material/go/comment> ?comment
+optional{
+?s <http://bds.csdb.cn/material/go/relationship> ?relationship.
+?relationship <http://bds.csdb.cn/material/go/relationshipGoSource> ?relationshipGoSource.
+?relationship <http://bds.csdb.cn/material/go/relationshipType> ?relationshipType.
+}}
+
+uniport 
+
+prefix uniprot:<http://bds.csdb.cn/material/uniprot/>
+SELECT ?s ?p ?o
+WHERE  { ?s uniprot:uniprotId "Q465P7_METBF" ;?p ?o}
+
+
+  SELECT distinct ?uniprotId ?dblinktype ?dblinkVal ?accessionNumber ?description ?taxid 
+ where {
+ ?s <http://bds.csdb.cn/material/uniprot/uniprotId> ?uniprotId. 
+ ?s	<http://bds.csdb.cn/material/uniprot/accessionNumber> ?accessionNumber.
+ ?s	<http://bds.csdb.cn/material/uniprot/description> ?description.
+ ?s	<http://bds.csdb.cn/material/uniprot/taxid> ?taxid.
+ optional{?s <http://bds.csdb.cn/material/uniprot/dblink> ?dblink.
+ ?dblink <http://bds.csdb.cn/material/uniprot/dblinkType> ?dblinktype.
+ ?dblink <http://bds.csdb.cn/material/uniprot/dblinkVal> ?dblinkVal.}
+}
+
+50359994
 cd /usr/lib/node_modules/mongo-express
