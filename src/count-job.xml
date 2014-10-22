@@ -94,5 +94,14 @@
 		<property name="whereClause"
 			value="where { ?s &lt;http://bds.csdb.cn/material/uniprot/uniprotId> ?uniprotId. optional{?s &lt;http://bds.csdb.cn/material/uniprot/dblink> ?dblink. ?dblink &lt;http://bds.csdb.cn/material/uniprot/dblinkType> ?dblinktype. ?dblink &lt;http://bds.csdb.cn/material/uniprot/dblinkVal> ?dblinkVal.} ?s &lt;http://bds.csdb.cn/material/uniprot/accessionNumber> ?accessionNumber. ?s &lt;http://bds.csdb.cn/material/uniprot/description> ?description. ?s &lt;http://bds.csdb.cn/material/uniprot/taxid> ?taxid.}" />
 	</bean>
+	<bean id="datareaderpathwaytwo" class="cn.cnic.virostudio.count.CountAll">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause" value="SELECT (COUNT(*) AS ?count)" />
+		<property name="whereClause"
+		  value="WHERE {{?s &lt;http://bds.csdb.cn/material/kegg/organismGn> ?organismGn }UNION{ ?xref  &lt;http://bds.csdb.cn/material/dbClass>  'keggpathwayXTaxon' . ?xref &lt;http://bds.csdb.cn/material/kegg/organismGn>  ?organismGn} ?xref  &lt;http://bds.csdb.cn/material/kegg/taxid> ?taxid.}"/>
+	</bean>
 	
 </beans>
