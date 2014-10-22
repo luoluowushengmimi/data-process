@@ -19,11 +19,16 @@ public class StartPathway {
 //		JobController job = context.getBean("job", JobController.class);
 //		job.doListener();
 //		context.close();
-		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "pathway-job.xml" });
-		Step step = context.getBean("step", Step.class);
-		loginfo.info("pathway总条数是： "+step.doStep(0));
-		context.close();
+//		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+//				new String[] { "pathway-job.xml" });
+//		Step step = context.getBean("step", Step.class);
+//		loginfo.info("pathway总条数是： "+step.doStep(0));
+//		context.close();
+		ClassPathXmlApplicationContext context2 = new ClassPathXmlApplicationContext(
+				new String[] { "pathway-job-two.xml" });
+		Step step2 = context2.getBean("step", Step.class);
+		loginfo.info("pathway总条数是： "+step2.doStep(0));
+		context2.close();
 	}
 
 }
