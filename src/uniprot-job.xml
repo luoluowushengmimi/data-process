@@ -53,6 +53,7 @@
 			<bean class="cn.cnic.virostudio.process.PreProcessor">
 				<property name="conditions">
 					<list>
+					<ref bean="dblinktype-filter-condition"/>
 					</list>
 				</property>
 			</bean>
@@ -82,7 +83,10 @@
 			</bean>
 		</property>
 	</bean>
-
+    <bean id="dblinktype-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
+		<property name="key" value="dblinktype"></property>
+		<property name="value" value="(GeneID|GO|Pfam|PDB)"></property>
+	</bean>
 	<bean id="uniprotId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
