@@ -19,13 +19,13 @@ public class ProcessTest {
 
 	public static void main(String[] args) throws Exception {
 		ProcessTest test=new ProcessTest();
-		//test.taxonomyTest();
+		test.taxonomyTest();
 		//test.genebankTest();
 		//test.geneTest();
 		//test.keggenzymeTest();
 		//test.keggCompound();
 		//test.addGenomeTitleTest();
-		test.uniprot();
+		//test.pdbTest();
 	}
 	
 	public void addGenomeTitleTest(){
@@ -66,11 +66,11 @@ public class ProcessTest {
 		//JobController job = context.getBean("job", JobController.class);
 		//job.doListener();
 		Multimap<String, String> resultmap = ArrayListMultimap.create();
-		resultmap.put("taxid", "1");
-		resultmap.put("nameclass", "hello");
-		resultmap.put("taxname", "root");
-		resultmap.put("nodeRank", "superfamily");
-		resultmap.put("parentId", "7434");
+		resultmap.put("taxid", "6");
+		resultmap.put("nameclass", "scientific name");
+		resultmap.put("taxname", "Azorhizobium");
+		resultmap.put("nodeRank", "genus");
+		resultmap.put("parentId", "335928");
 		System.out.println("before process " + resultmap);
 		CompositeProcessor processor = context.getBean("main-processor",
 				CompositeProcessor.class);
@@ -157,6 +157,21 @@ public class ProcessTest {
 //		resultmap.put("dblinkVal", "PF12837");
 //		resultmap.put("dblinktype", "PDB");
 //		resultmap.put("dblinkVal", "1J0A");
+		System.out.println("before process " + resultmap);
+		CompositeProcessor processor = context.getBean("main-processor",
+				CompositeProcessor.class);
+		System.out.println("afer process " + processor.process(resultmap));
+	}
+	
+	public void pdbTest() {
+		ApplicationContext context = new ClassPathXmlApplicationContext(
+				new String[] { "pdb-job.xml" });
+		Multimap<String, String> resultmap = ArrayListMultimap.create();
+		resultmap.put("pdbid", "1YG0");
+		resultmap.put("title", "SOLUTION STRUCTURE OF APO-COPP FROM HELICOBACTER PYLORI");
+		resultmap.put("taxonNode", "http://bds.csdb.cn/material/taxonomy/85962");
+		resultmap.put("dblinkType", "UNP");
+		resultmap.put("dblinkval", "NRAM_IATRA");
 		System.out.println("before process " + resultmap);
 		CompositeProcessor processor = context.getBean("main-processor",
 				CompositeProcessor.class);
