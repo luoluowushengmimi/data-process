@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="modify" class="cn.cnic.viro.test.Modify">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="http://gcm.wfcc.info/"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="select ?s ?belongto ?geneend  ?geneorient ?genestart ?locustag ?genetype" />
+		<property name="whereClause"
+		   value="WHERE{ ?s &lt;http://gcm.wdcm.org/gcm/belongto> ?belongto. ?s &lt;http://gcm.wdcm.org/gcm/geneend> ?geneend .?s &lt;http://gcm.wdcm.org/gcm/geneorient> ?geneorient. ?s &lt;http://gcm.wdcm.org/gcm/genestart> ?genestart. ?s &lt;http://gcm.wdcm.org/gcm/locustag> ?locustag. ?s &lt;http://gcm.wdcm.org/gcm/genetype> ?genetype. ?s &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type. filter( ?type=&lt;http://gcm.wfcc.info/type/gene>)}"/>
+		<property name="limit" value="5"></property>
+		<property name="offset" value="0"></property>
+		<property name="modes">
+			<list>
+				<ref bean="belongto-mode" />
+				<ref bean="geneend-mode" />
+				<ref bean="geneorient-mode" />
+				<ref bean="genestart-mode" />
+				<ref bean="locustag-mode" />
+				<ref bean="genetype-mode" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.14:1111" />
+	</bean>
+	<bean id="belongto-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="belongto" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/belongto"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/belongTo" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="geneend-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="geneend" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/geneend"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/geneEnd" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="geneorient-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="geneorient" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/geneorient"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/geneOrient" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="genestart-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="genestart" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/genestart"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/geneStart" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="locustag-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="locustag"/>
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/locustag"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/locusTag" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="genetype-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="genetype"/>
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/genetype"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/geneType" />
+			</bean>
+		</property>
+	</bean>
+</beans>

@@ -2,35 +2,53 @@ package cn.cnic.viro.test;
 
 public class Mode {
 
-	private String name;
+//	private String name;
 	
-	private String oldp;
+	private MatchRule matchRule;
 	
-	private String newp;
+	private ModifyData change;
+	
 
-	public String getName() {
-		return name;
+	public MatchRule getMatchRule() {
+		return matchRule;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setMatchRule(MatchRule matchRule) {
+		this.matchRule = matchRule;
 	}
 
-	public String getOldp() {
-		return oldp;
+	public ModifyData getChange() {
+		return change;
 	}
 
-	public void setOldp(String oldp) {
-		this.oldp = oldp;
+	public void setChange(ModifyData change) {
+		this.change = change;
 	}
 
-	public String getNewp() {
-		return newp;
-	}
 
-	public void setNewp(String newp) {
-		this.newp = newp;
-	}
+//	public String getName() {
+//	return name;
+//	}
+//
+//	public void setName(String name) {
+//		this.name = name;
+//	}
+//
+//	public String getOldp() {
+//		return oldp;
+//	}
+//
+//	public void setOldp(String oldp) {
+//		this.oldp = oldp;
+//	}
+//
+//	public String getNewp() {
+//		return newp;
+//	}
+//
+//	public void setNewp(String newp) {
+//		this.newp = newp;
+//	}
 	
 	
 

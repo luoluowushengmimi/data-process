@@ -113,10 +113,13 @@ public class Modify {
 	}
 
 	public void doListener() {
+		int number=0;
 		while(true){
 			String query=selectClause+" from <"+dataBase+"> "+whereClause+" limit "+limit+" offset "+offset;
 			loginfo.info("query "+query);
 			int count=this.doAction(query);
+			number=number+count;
+			loginfo.info("all number: "+number);
 		if(count<limit){
 			break;
 		}
@@ -156,18 +159,35 @@ public class Modify {
 		for(HashMap<String,String> map:lists){
 			String subject=map.get("s");
 			for(Mode mode:modes){
-				String key=mode.getName();
-				String oldp=mode.getOldp();
-				String newp=mode.getNewp();
-				String value=map.get(key);
-				Triple tripleold=this.constructTriple(subject, oldp, value);
-				Triple triplenew=this.constructTriple(subject, newp, value);
+				String key=mode.getMatchRule().getPname();
+				String oldp=mode.getChange().getPoldName();
+				String newp=mode.getChange().getPnewName();
+				String oldvalue=map.get(key);
+				String newvalue=this.confirmOvalue(oldvalue, mode);
+				if(newvalue==null){
+					throw new RuntimeException("ModifyData 配置错误，请重新配置，要么就是Otrim和oprefix都有值，要么是都没有值");
+				}
+				Triple tripleold=this.constructTriple(subject, oldp, newvalue);
+				Triple triplenew=this.constructTriple(subject, newp, newvalue);
 				olds.add(tripleold);
 				news.add(triplenew);
 			}
 		}
 		Results result=new Results(olds,news);
 		return result;
+	}
+	
+	public String confirmOvalue(String oldvalue,Mode mode){
+		if(mode.getChange().getOprefix()==null||mode.getChange().getOtrim()==null){
+			return oldvalue;
+		}
+		else if(mode.getChange().getOprefix().isEmpty()||mode.getChange().getOtrim().isEmpty()){
+			return oldvalue;
+		}
+		else if(!mode.getChange().getOprefix().isEmpty()&&!mode.getChange().getOtrim().isEmpty()){
+			return oldvalue.replaceAll(mode.getChange().getOtrim(), mode.getChange().getOprefix());
+		}
+		else return null;
 	}
 	
 
@@ -219,8 +239,10 @@ public class Modify {
 	
 	public static void main(String[] args) {
 		//Modify modify=new Modify();
+		//ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
+				//new String[] { "genome-modify-job.xml" });
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "genome-modify-job.xml" });
+				new String[] { "modify-gene-job.xml" });
 		Modify modify = context.getBean("modify", Modify.class);
 		modify.doListener();
 		context.close();
@@ -228,8 +250,5 @@ public class Modify {
 //		ArrayList<Triple> list=new ArrayList<Triple>();
 //		list.add(modify.constructTriple("http://gcm.wfcc.info/genome/NZ_AABF02000001", "http://gcm.wdcm.org/gcm/tostrain", "ATCC 49256"));
 //		modify.deleteolds(list);
-		
-		
 	}
-
 }
