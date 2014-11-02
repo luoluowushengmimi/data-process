@@ -69,6 +69,7 @@
 				<ref bean="taxonSource-processor"/>
 				<ref bean="add-orientproperty-processor"/>
 				<ref bean="add-typeproperty-processor"/>
+				<ref bean="add-title-processor"/>
 			</list>
 		</property>
 
@@ -141,7 +142,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="gcm:genetype" />
+				<property name="pnewName" value="gcm:geneType" />
 			</bean>
 		</property>
 	</bean>
@@ -169,6 +170,18 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
 				<property name="content" value="http://gcm.wfcc.info/type/gene" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="rdfs:comment" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:title" />
 			</bean>
 		</property>
 	</bean>
