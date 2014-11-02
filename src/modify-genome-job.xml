@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="modify" class="cn.cnic.viro.test.Modify">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="http://gcm.wfcc.info/"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="limit" value="500"></property>
+		<property name="offset" value="0"></property>
+		<property name="selectClause"
+			value="select ?s ?organism ?bioproject ?tostrain" />
+		<property name="whereClause"
+		  value="WHERE{ ?s &lt;http://purl.uniprot.org/core/organism> ?organism. ?s &lt;http://gcm.wdcm.org/gcm/BioProject> ?bioproject .?s &lt;http://gcm.wdcm.org/gcm/tostrain> ?tostrain. ?s &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type . filter( ?type=&lt;http://gcm.wfcc.info/type/genome>)}"/>
+		<property name="modes">
+			<list>
+				<ref bean="organism-mode" />
+				<ref bean="bioproject-mode" />
+				<ref bean="tostrain-mode" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.14:1111" />
+	</bean>
+	<bean id="organism-mode" class="cn.cnic.viro.test.Mode">
+		<property name="name" value="organism" />
+		<property name="oldp" value="http://purl.uniprot.org/core/organism"></property>
+		<property name="newp" value="http://gcm.wdcm.org/gcm/organism"></property>
+	</bean>
+	<bean id="bioproject-mode" class="cn.cnic.viro.test.Mode">
+		<property name="name" value="bioproject" />
+		<property name="oldp" value="http://gcm.wdcm.org/gcm/BioProject"></property>
+		<property name="newp" value="http://gcm.wdcm.org/gcm/bioProject"></property>
+	</bean>
+	<bean id="tostrain-mode" class="cn.cnic.viro.test.Mode">
+		<property name="name" value="tostrain" />
+		<property name="oldp" value="http://gcm.wdcm.org/gcm/tostrain"></property>
+		<property name="newp" value="http://gcm.wdcm.org/gcm/toStrain "></property>
+	</bean>
+	
+</beans>
