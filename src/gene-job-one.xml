@@ -122,7 +122,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:belongto" />
+				<property name="pnewName" value="gcm:belongTo" />
 				<property name="oprefix" value="http://gcm.wfcc.info/genome/"></property>
 				<property name="otype" value="uri"></property>
 			</bean>
@@ -136,7 +136,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:locustag" />
+				<property name="pnewName" value="gcm:locusTag" />
 			</bean>
 		</property>
 	</bean>
@@ -148,7 +148,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:genestart" />
+				<property name="pnewName" value="gcm:geneStart" />
 			</bean>
 		</property>
 	</bean>
@@ -160,7 +160,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:geneend" />
+				<property name="pnewName" value="gcm:geneEnd" />
 			</bean>
 		</property>
 	</bean>
@@ -183,7 +183,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:geneorient" />
+				<property name="pnewName" value="gcm:geneOrient" />
 				<property name="content" value="-"></property>
 			</bean>
 		</property>
@@ -199,7 +199,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:geneorient" />
+				<property name="pnewName" value="gcm:geneOrient" />
 				<property name="content" value="+"></property>
 			</bean>
 		</property>

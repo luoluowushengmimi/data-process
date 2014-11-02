@@ -79,7 +79,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="go:name" />
+				<property name="pnewName" value="gcm:symbol" />
 			</bean>
 		</property>
 	</bean>
@@ -91,7 +91,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="go:hasNamespace" />
+				<property name="pnewName" value="GCM:class" />
 			</bean>
 		</property>
 	</bean>
