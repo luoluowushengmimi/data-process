@@ -126,7 +126,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:tostrain" />
+				<property name="pnewName" value="GCM:toStrain" />
 			</bean>
 		</property>
 	</bean>
@@ -141,7 +141,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="up:organism" />
+				<property name="pnewName" value="GCM:organism" />
 				<property name="otype" value="uri" />
 			</bean>
 		</property>
@@ -187,7 +187,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:BioProject" />
+				<property name="pnewName" value="gcm:bioProject" />
 				<property name="oprefix" value="BioProject:" />
 			</bean>
 		</property>
@@ -244,6 +244,18 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
 				<property name="content" value="http://gcm.wfcc.info/type/genome" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="comment" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:title" />
 			</bean>
 		</property>
 	</bean>
