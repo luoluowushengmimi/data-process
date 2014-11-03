@@ -21,6 +21,8 @@
 			value="SELECT distinct ?compoundId ?compoundName ?formula ?remark ?exactMass ?molWeight ?comment" />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/kegg/compoundId> ?compoundId. ?s &lt;http://bds.csdb.cn/material/kegg/compoundName> ?compoundName. optional{?s &lt;http://bds.csdb.cn/material/kegg/formula> ?formula.} optional{?s &lt;http://bds.csdb.cn/material/kegg/remark> ?remark.} optional{?s &lt;http://bds.csdb.cn/material/kegg/exactMass> ?exactMass.} optional{?s &lt;http://bds.csdb.cn/material/kegg/molWeight> ?molWeight.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} " />
+		<property  name="limit" value="1"></property>
+		<property  name="offset" value="1"></property>
 	</bean>
 
 
@@ -29,7 +31,7 @@
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/compound/" />
-		<property name="sprefix" value="http://gcm.wfcc.info/keggcompound/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/compound/" />
 		<property name="idname" value="rdfs:label" />
 		<property name="namespace">
 			<map>
@@ -201,7 +203,7 @@
 	<bean id="remark-G-change" class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:xGlycan" />
 				<property name="content" value="(^(&quot;G))(.*)"></property>
-				<property name="oprefix" value="http://gcm.wfcc.info/keggglycan/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/glycan/"></property>
 				<property name="otrim" value="&quot;"></property>
 				<property name="otype" value="uri"></property>
 	</bean>
