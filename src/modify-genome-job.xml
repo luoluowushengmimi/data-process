@@ -27,19 +27,43 @@
 		<constructor-arg value="jdbc:virtuoso://10.0.10.14:1111" />
 	</bean>
 	<bean id="organism-mode" class="cn.cnic.viro.test.Mode">
-		<property name="name" value="organism" />
-		<property name="oldp" value="http://purl.uniprot.org/core/organism"></property>
-		<property name="newp" value="http://gcm.wdcm.org/gcm/organism"></property>
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="organism" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://purl.uniprot.org/core/organism"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/organism" />
+			</bean>
+		</property>
 	</bean>
 	<bean id="bioproject-mode" class="cn.cnic.viro.test.Mode">
-		<property name="name" value="bioproject" />
-		<property name="oldp" value="http://gcm.wdcm.org/gcm/BioProject"></property>
-		<property name="newp" value="http://gcm.wdcm.org/gcm/bioProject"></property>
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="bioproject" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/BioProject"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/bioProject" />
+			</bean>
+		</property>
 	</bean>
 	<bean id="tostrain-mode" class="cn.cnic.viro.test.Mode">
-		<property name="name" value="tostrain" />
-		<property name="oldp" value="http://gcm.wdcm.org/gcm/tostrain"></property>
-		<property name="newp" value="http://gcm.wdcm.org/gcm/toStrain "></property>
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="tostrain" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="poldName" value="http://gcm.wdcm.org/gcm/tostrain"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/toStrain" />
+			</bean>
+		</property>
 	</bean>
 	
 </beans>
