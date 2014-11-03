@@ -266,7 +266,7 @@
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
-				<property name="content" value="http://gcm.wfcc.info/type/keggcompound/" />
+				<property name="content" value="http://gcm.wfcc.info/type/keggcompound" />
 			</bean>
 		</property>
 	</bean>
