@@ -21,8 +21,6 @@
 			value="SELECT distinct ?enzymeId ?enzymeName ?sysname ?class ?reactionSource ?substrate ?product ?comment ?history  ?keggGeneStdId" />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. optional{?s &lt;http://bds.csdb.cn/material/kegg/sysname> ?sysname.} optional{?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/substrate> ?substrate.} optional{?s &lt;http://bds.csdb.cn/material/kegg/product> ?product.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.} optional{?s &lt;http://bds.csdb.cn/material/kegg/history> ?history.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.} optional{?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}" />		
-	    <property name="limit" value="50000" />
-        <property name="offset" value="106487864" />
 	</bean>
 
 
@@ -31,7 +29,7 @@
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/enzyme/" />
-		<property name="sprefix" value="http://gcm.wfcc.info/keggenzyme/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/enzyme/" />
 		<property name="idname" value="rdfs:label" />
 		<property name="namespace">
 			<map>
@@ -146,7 +144,7 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:xReaction" />
 				<property name="otrim" value="http://bds.csdb.cn/material/kegg/reaction/"></property>
-				<property name="oprefix" value="http://gcm.wfcc.info/keggreaction/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/reaction/"></property>
 				<property name="otype" value="uri"></property>
 			</bean>
 		</property>
@@ -161,7 +159,7 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:substrate" />
 				<property name="otrim" value="http://bds.csdb.cn/material/kegg/compound/"></property>
-				<property name="oprefix" value="http://gcm.wfcc.info/keggcompound/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/compound/"></property>
 				<property name="otype" value="uri"></property>
 			</bean>
 		</property>
@@ -174,9 +172,9 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:product" />
+				<property name="pnewName" value="GCM:xProductCompound" />
 				<property name="otrim" value="http://bds.csdb.cn/material/kegg/compound/"></property>
-				<property name="oprefix" value="http://gcm.wfcc.info/keggcompound/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/compound/"></property>
 				<property name="otype" value="uri"></property>
 			</bean>
 		</property>
