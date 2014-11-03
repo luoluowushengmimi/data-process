@@ -21,8 +21,6 @@
 			value="SELECT distinct ?compoundId ?compoundName ?formula ?remark ?exactMass ?molWeight ?comment" />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/kegg/compoundId> ?compoundId. ?s &lt;http://bds.csdb.cn/material/kegg/compoundName> ?compoundName. optional{?s &lt;http://bds.csdb.cn/material/kegg/formula> ?formula.} optional{?s &lt;http://bds.csdb.cn/material/kegg/remark> ?remark.} optional{?s &lt;http://bds.csdb.cn/material/kegg/exactMass> ?exactMass.} optional{?s &lt;http://bds.csdb.cn/material/kegg/molWeight> ?molWeight.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.}} " />
-		<property  name="limit" value="1"></property>
-		<property  name="offset" value="1"></property>
 	</bean>
 
 
