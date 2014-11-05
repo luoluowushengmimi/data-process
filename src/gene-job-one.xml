@@ -21,8 +21,6 @@
 			value="SELECT distinct ?locusId ?featureTagName ?dbXrefTxt ?locus_tag ?seqMax ?seqMin ?locationTxt " />
 		<property name="whereClause"
 			value="where { ?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. optional{?feature &lt;http://bds.csdb.cn/material/genbank/location> ?location.} ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?feature &lt;http://bds.csdb.cn/material/genbank/featureTagName> ?featureTagName. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/locus_tag> ?locus_tag.} optional{?location &lt;http://bds.csdb.cn/material/genbank/seqMax> ?seqMax.} optional{?location &lt;http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.} optional{?location &lt;http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.}}" />
-		<property name="limit" value="50000" />
-		<property name="offset" value="0" />
 	</bean>
 
 
@@ -148,7 +146,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="gcm:geneStart" />
+				<property name="pnewName" value="gcm:geneEnd" />
 			</bean>
 		</property>
 	</bean>
@@ -160,7 +158,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="gcm:geneEnd" />
+				<property name="pnewName" value="gcm:geneStart" />
 			</bean>
 		</property>
 	</bean>
