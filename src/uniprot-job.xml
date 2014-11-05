@@ -21,6 +21,8 @@
 			value="SELECT distinct ?uniprotId ?dblinktype ?dblinkVal ?accessionNumber ?description ?taxid" />
 		<property name="whereClause"
 			value="where { ?s &lt;http://bds.csdb.cn/material/uniprot/uniprotId> ?uniprotId. optional{?s &lt;http://bds.csdb.cn/material/uniprot/dblink> ?dblink. ?dblink &lt;http://bds.csdb.cn/material/uniprot/dblinkType> ?dblinktype. ?dblink &lt;http://bds.csdb.cn/material/uniprot/dblinkVal> ?dblinkVal.} ?s &lt;http://bds.csdb.cn/material/uniprot/accessionNumber> ?accessionNumber. ?s &lt;http://bds.csdb.cn/material/uniprot/description> ?description. ?s &lt;http://bds.csdb.cn/material/uniprot/taxid> ?taxid.}" />
+		<property name="limit" value="100"></property>
+		<property name="offset" value="1"></property>
 	</bean>
 
 
@@ -108,6 +110,7 @@
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:accession" />
+				<property name="oprefix" value="http://gcm.wfcc.info/protien/accnum/" />
 			</bean>
 		</property>
 	</bean>
@@ -119,7 +122,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="rdfs:comment" />
+				<property name="pnewName" value="GCM:definition" />
 			</bean>
 		</property>
 	</bean>
@@ -267,7 +270,7 @@
 	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
-				<property name="pname" value="rdfs:comment" />
+				<property name="pname" value="GCM:definition" />
 			</bean>
 		</property>
 		<property name="change">
