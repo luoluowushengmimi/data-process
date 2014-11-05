@@ -15,9 +15,9 @@
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
-            value="select ?pdbid ?title ?taxonNode ?dblinkval ?dblinkType ?accessionNumber"></property>		
+            value="select ?pdbid ?title ?taxonNode  ?accessionNumber"></property>		
         <property name="whereClause"
-           value="where{?s &lt;http://bds.csdb.cn/material/pdb/pdbid> ?pdbid. ?s &lt;http://bds.csdb.cn/material/pdb/title> ?title. ?s &lt;http://bds.csdb.cn/material/pdb/taxonNode> ?taxonNode. optional{?s &lt;http://bds.csdb.cn/material/pdb/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/pdb/dblinkSource> ?dblinkSource.} optional{ ?dblinkSource &lt;http://bds.csdb.cn/material/uniprot/accessionNumber> ?accessionNumber. } optional{?dblink &lt;http://bds.csdb.cn/material/pdb/dblinkType> ?dblinkType. } optional{?dblink &lt;http://bds.csdb.cn/material/pdb/dblinkVal> ?dblinkval.}}"></property>   
+          value="where{?s &lt;http://bds.csdb.cn/material/pdb/pdbid> ?pdbid. ?s &lt;http://bds.csdb.cn/material/pdb/title> ?title. ?s &lt;http://bds.csdb.cn/material/pdb/taxonNode> ?taxonNode. optional{?s &lt;http://bds.csdb.cn/material/pdb/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/pdb/dblinkSource> ?dblinkSource.} optional{ ?dblinkSource &lt;http://bds.csdb.cn/material/uniprot/accessionNumber> ?accessionNumber. }}"/>
     </bean>
 
 	<bean id="source" class="java.lang.String">
@@ -49,7 +49,6 @@
 			<bean class="cn.cnic.virostudio.process.PreProcessor">
 				<property name="conditions">
 					<list>
-					<ref bean="dblinktype-filter-condition"/>
 					</list>
 				</property>
 			</bean>
@@ -60,7 +59,6 @@
 				<ref bean="pdbid-processor" />
 				<ref bean="title-processor" />
 				<ref bean="taxonNode-processor" />
-				<ref bean="dblinkval-processor" />
 				<ref bean="accessionNumber-processor" />
 				<ref bean="add-orientproperty-processor" />
 				<ref bean="add-typeproperty-processor" />
@@ -72,15 +70,10 @@
 			<bean class="cn.cnic.virostudio.process.PostProcessor">
 			  <property name="removeKeys">
 			    <list>
-			     <value>dblinkType</value>
 			    </list>
 			  </property>
 			</bean>
 		</property>
-	</bean>
-       <bean id="dblinktype-filter-condition" class="cn.cnic.virostudio.rule.FilterCondition">
-		<property name="key" value="dblinkType"></property>
-		<property name="value" value="(UNP)"></property>
 	</bean>
 	<bean id="pdbid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
@@ -120,20 +113,6 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="dblinkval-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
-		<property name="matchRule">
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="dblinkval" />
-				</bean>
-		</property>
-		<property name="change">
-			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:xprotein" />
-				<property name="oprefix" value="http://gcm.wfcc.info/protein/"></property>
-				<property name="otype" value="uri"></property>
-			</bean>
-		</property>
-	</bean>
 	<bean id="accessionNumber-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
@@ -142,7 +121,8 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="GCM:xproteinacc" />
+				<property name="pnewName" value="GCM:xProteinAcc" />
+				<property name="oprefix" value="http://gcm.wfcc.info/protien/accnum/" />
 			</bean>
 		</property>
 	</bean>
