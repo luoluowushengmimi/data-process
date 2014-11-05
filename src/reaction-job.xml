@@ -29,7 +29,7 @@
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/reaction/" />
-		<property name="sprefix" value="http://gcm.wfcc.info/keggreaction/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/reaction/" />
 		<property name="idname" value="rdfs:label" />
 		<property name="namespace">
 			<map>
