@@ -19,9 +19,10 @@
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
-			value=" select ?goId ?goName ?goNameSpace ?comment ?relationshipGoSource ?relationshipType" />
+			value=" select ?goId ?goName ?goNameSpace ?comment ?definition ?synonymvalue" />
 		<property name="whereClause"
-		 value="where{?s &lt;http://bds.csdb.cn/material/go/goId> ?goId. ?s &lt;http://bds.csdb.cn/material/go/goName> ?goName. ?s &lt;http://bds.csdb.cn/material/go/goNameSpace> ?goNameSpace. ?s &lt;http://bds.csdb.cn/material/go/comment> ?comment. optional{ ?s &lt;http://bds.csdb.cn/material/go/relationship> ?relationship. ?relationship &lt;http://bds.csdb.cn/material/go/relationshipGoSource> ?relationshipGoSource. ?relationship &lt;http://bds.csdb.cn/material/go/relationshipType> ?relationshipType.}}"></property>		
+		  value="where{?s &lt;http://bds.csdb.cn/material/go/goId> ?goId. ?s &lt;http://bds.csdb.cn/material/go/goName> ?goName. ?s &lt;http://bds.csdb.cn/material/go/goNameSpace> ?goNameSpace. optional{?s &lt;http://bds.csdb.cn/material/go/comment> ?comment.}
+optional{?s &lt;http://bds.csdb.cn/material/go/defination> ?defination.  ?s &lt;http://bds.csdb.cn/material/go/synonym> ?synonym. ?synonym &lt;http://bds.csdb.cn/material/go/synonym> ?synonymvalue.}}"/>
 	</bean>
 	<bean id="source" class="java.lang.String">
 		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
@@ -37,11 +38,12 @@
 		</property>
 		<property name="processors">
 			<list>
-				<ref bean="switch-processor" />
 				<ref bean="goId-processor" />
 				<ref bean="goName-processor" />
 				<ref bean="goNameSpace-processor" />
 				<ref bean="comment-processor"/>
+				<ref bean="definition-processor"/>
+				<ref bean="synonymvalue-processor"/>
 				<ref bean="add-typeproperty-processor"/>
 				<ref bean="add-orientproperty-processor"/>
 				<ref bean="add-title-processor"/>
@@ -51,8 +53,6 @@
 		   <bean class="cn.cnic.virostudio.process.PostProcessor">
 			  <property name="removeKeys">
 			    <list>
-			       <value>relationshipGoSource</value>
-			       <value>relationshipType</value>
 			    </list>
 			  </property>
 			</bean>
@@ -79,7 +79,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="gcm:symbol" />
+				<property name="pnewName" value="GCM:symbol" />
 			</bean>
 		</property>
 	</bean>
@@ -108,51 +108,28 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="switch-processor" class="cn.cnic.virostudio.process.SwitchProcessor">
-		<property name="processors">
-			<list>
-				<ref bean="isa-processor" />
-				<ref bean="partof-processor" />
-			</list>
-		</property>
-	</bean>
-	<bean id="isa-processor" class="cn.cnic.virostudio.process.CombineProcessor">
-		<property name="matchRules">
-			<list>
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="relationshipType" />
-					<property name="ofilter" value="(^(is_a))(.*)" />
-				</bean>
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="relationshipGoSource" />
-				</bean>
-			</list>
+	
+	<bean id="definition-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="definition" />
+			</bean>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="go:is_a" />
-				<property name="content" value="relationshipGoSource.value" />
-				<property name="otrim" value="http://bds.csdb.cn/material/go/"></property>
+				<property name="pnewName" value="GCM:definition" />
 			</bean>
 		</property>
 	</bean>
-	<bean id="partof-processor" class="cn.cnic.virostudio.process.CombineProcessor">
-		<property name="matchRules">
-			<list>
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="relationshipType" />
-					<property name="ofilter" value="(^(part_of))(.*)" />
-				</bean>
-				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="relationshipGoSource" />
-				</bean>
-			</list>
+	<bean id="synonymvalue-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="synonymvalue" />
+			</bean>
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="go: part_of" />
-				<property name="content" value="relationshipGoSource.value" />
-				<property name="otrim" value="http://bds.csdb.cn/material/go/"></property>
+				<property name="pnewName" value="dwc:vernacularName" />
 			</bean>
 		</property>
 	</bean>
@@ -172,8 +149,11 @@
 				<entry key="dc">
 					<value>http://purl.org/dc/elements/1.1/</value>
 				</entry>
-				<entry key="go">
-					<value>http://gcm.wfcc.info/go/</value>
+				<entry key="GCM">
+					<value>http://gcm.wdcm.org/gcm/</value>
+				</entry>
+				<entry key="dwc">
+				  <value>http://rs.tdwg.org/dwc/terms/</value>
 				</entry>
 			</map>
 		</property>
@@ -181,7 +161,7 @@
 	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
-				<property name="pname" value="go:name" />
+				<property name="pname" value="GCM:symbol" />
 			</bean>
 		</property>
 		<property name="change">
@@ -213,7 +193,7 @@
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
-				<property name="content" value="http://gcm.wfcc.info/type/go/" />
+				<property name="content" value="http://gcm.wfcc.info/type/go" />
 			</bean>
 		</property>
 	</bean>
