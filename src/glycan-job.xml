@@ -21,17 +21,15 @@
 			value="SELECT distinct ?glycanId ?glycanName ?composition ?mass" />
 		<property name="whereClause" 
 		value="where { ?s &lt;http://bds.csdb.cn/material/kegg/glycanId> ?glycanId. ?s &lt;http://bds.csdb.cn/material/kegg/glycanName> ?glycanName. optional{?s &lt;http://bds.csdb.cn/material/kegg/composition> ?composition.} optional{?s &lt;http://bds.csdb.cn/material/kegg/mass> ?mass.}}" />
-		<property name="limit" value="50000" />
-		<property name="offset" value="0" />
 	</bean>
 
 
 	<bean id="source" class="java.lang.String">
-		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/glycan/" />
-		<property name="sprefix" value="http://gcm.wfcc.info/keggglycan/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/glycan/" />
 		<property name="idname" value="rdfs:label" />
 		<property name="namespace">
 			<map>
