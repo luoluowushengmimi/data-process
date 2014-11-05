@@ -21,13 +21,13 @@
 			value="SELECT distinct ?locusId ?dbXrefTxt ?definition ?keywords ?projectId ?bioprojectId ?strain " />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/genbank/locusId> ?locusId. ?s &lt;http://bds.csdb.cn/material/genbank/feature> ?feature. ?feature &lt;http://bds.csdb.cn/material/genbank/qualifier> ?qualifier. ?qualifier &lt;http://bds.csdb.cn/material/genbank/dbxref> ?dbxref. ?dbxref &lt;http://bds.csdb.cn/material/genbank/dbxrefTxt> ?dbXrefTxt. ?s &lt;http://bds.csdb.cn/material/genbank/definition> ?definition. ?s &lt;http://bds.csdb.cn/material/genbank/keywords> ?keywords. optional{?s &lt;http://bds.csdb.cn/material/genbank/dblink> ?dblink.} optional{?dblink &lt;http://bds.csdb.cn/material/genbank/projectId> ?projectId.} optional{ ?dblink &lt;http://bds.csdb.cn/material/genbank/bioprojectId> ?bioprojectId.} optional{?qualifier &lt;http://bds.csdb.cn/material/genbank/strain> ?strain.}} "/>
-		<property name="limit" value="50000" />
-		<property name="offset" value="0" />
+			<property name="limit" value="2000000"/>
+			<property name="offset" value="4553732"/>
 	</bean>
 
 
 	<bean id="source" class="java.lang.String">
-		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/genebank/"/>
@@ -88,6 +88,7 @@
 				<ref bean="db_xref-geneID-processor" />
 				<ref bean="add-typeproperty-processor"/>
 				<ref bean="add-orientproperty-processor"/>
+				<ref bean="add-title-processor"/>
 			</list>
 		</property>
 		<property name="postProcessor">
@@ -187,7 +188,7 @@
 		</property>
 		<property name="change">
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
-				<property name="pnewName" value="gcm:bioProject" />
+				<property name="pnewName" value="GCM:bioProject" />
 				<property name="oprefix" value="BioProject:" />
 			</bean>
 		</property>
@@ -250,7 +251,7 @@
 	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
-				<property name="pname" value="comment" />
+				<property name="pname" value="rdfs:comment" />
 			</bean>
 		</property>
 		<property name="change">
