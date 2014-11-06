@@ -15,7 +15,7 @@ public class StartAddTitle {
 	 */
 	public static void main(String[] args) throws Exception {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "add-reaction-title.xml" });
+				new String[] { "add-pdb-title.xml" });
 		Step step = context.getBean("step", Step.class);
 		step.doStep(0);
 		context.close();
