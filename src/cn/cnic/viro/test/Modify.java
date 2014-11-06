@@ -157,8 +157,9 @@ public class Modify {
 		List<Triple> olds=new ArrayList<Triple>();
 		List<Triple> news=new ArrayList<Triple>();
 		for(HashMap<String,String> map:lists){
-			String subject=map.get("s");
+			//String subject=map.get("s");
 			for(Mode mode:modes){
+				String subject=this.subjectValue(map.get("s"),mode);
 				String key=mode.getMatchRule().getPname();
 				String oldp=mode.getChange().getPoldName();
 				String newp=mode.getChange().getPnewName();
@@ -237,12 +238,25 @@ public class Modify {
 		graph.getBulkUpdateHandler().delete(triples);
 	}
 	
+	public String subjectValue(String subject,Mode mode){
+		if(mode.getChange().getSubjectoldPrefix()==null||mode.getChange().getSubjectnewPrefix()==null){
+			return subject;
+		}
+		else if(mode.getChange().getSubjectoldPrefix().isEmpty()||mode.getChange().getSubjectnewPrefix().isEmpty()){
+			return subject;
+		}
+		else if(!mode.getChange().getSubjectoldPrefix().isEmpty()&&!mode.getChange().getSubjectnewPrefix().isEmpty()){
+			return subject.replaceAll(mode.getChange().getSubjectoldPrefix(), mode.getChange().getSubjectnewPrefix());
+		}
+		else return null;
+	}
+	
 	public static void main(String[] args) {
 		//Modify modify=new Modify();
 		//ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				//new String[] { "genome-modify-job.xml" });
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "modify-gene-job.xml" });
+				new String[] { "modify-enzyme-job.xml" });
 		Modify modify = context.getBean("modify", Modify.class);
 		modify.doListener();
 		context.close();
