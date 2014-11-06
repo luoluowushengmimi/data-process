@@ -17,8 +17,8 @@ public class StartGene {
 		context.close();
 		ClassPathXmlApplicationContext con = new ClassPathXmlApplicationContext(
 				new String[] { "gene-job-two.xml"});
-		Step steptwo = con.getBean("modify", Step.class);
-		loginfo.info("gene数据总条数是： "+step.doStep(0));
+		Step steptwo = con.getBean("step", Step.class);
+		loginfo.info("gene数据总条数是： "+steptwo.doStep(0));
 		con.close();
 	}
 }
