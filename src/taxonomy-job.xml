@@ -43,6 +43,7 @@
 				<ref bean="parentId-processor" />
 				<ref bean="add-typeproperty-processor"/>
 				<ref bean="add-orientproperty-processor"/>
+				<ref bean="add-title-processor"/>
 			</list>
 		</property>
 		<property name="postProcessor">
@@ -219,6 +220,18 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="rdf:type" />
 				<property name="content" value="http://gcm.wfcc.info/type/taxonomy/" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="add-title-processor" class="cn.cnic.virostudio.process.AddPropertyProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="dwc:scientificName" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="dc:title" />
 			</bean>
 		</property>
 	</bean>
