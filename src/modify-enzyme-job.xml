@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="modify" class="cn.cnic.viro.test.Modify">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="http://gcm.wfcc.info/"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="select ?s ?label ?symbol ?sysname ?class ?xReaction ?substrate ?product ?comment ?history  ?xKeggGene" />
+		<property name="whereClause" 
+		  value="where{
+?s &lt;http://www.w3.org/2000/01/rdf-schema#label> ?label. ?s &lt;http://gcm.wdcm.org/gcm/symbol> ?symbol. optional{?s &lt;http://gcm.wdcm.org/gcm/sysname> ?sysname.} optional{?s &lt;http://gcm.wdcm.org/gcm/class> ?class.} optional{?s &lt;http://gcm.wdcm.org/gcm/xReaction> ?xReaction.} optional{?s &lt;http://gcm.wdcm.org/gcm/substrate> ?substrate.} optional{?s &lt;http://gcm.wdcm.org/gcm/product> ?product.} optional{?s &lt;http://gcm.wdcm.org/gcm/comment> ?comment.} optional{?s &lt;http://gcm.wdcm.org/gcm/history> ?history.} optional{?s &lt;http://gcm.wdcm.org/gcm/xKeggGene> ?xKeggGene.} ?s &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type. filter( ?type=&lt;http://gcm.wfcc.info/type/keggenzyme>)} "></property>
+		<property name="limit" value="5"></property>
+		<property name="offset" value="5"></property>
+		<property name="modes">
+			<list>
+				<ref bean="label-mode"/>
+				<ref bean="symbol-mode"/>
+				<ref bean="sysname-mode"/>
+				<ref bean="class-mode"/>
+				<ref bean="xReaction-mode"/>
+				<ref bean="substrate-mode"/>
+				<ref bean="product-mode"/>
+				<ref bean="comment-mode"/>
+				<ref bean="history-mode"/>
+				<ref bean="xKeggGene-mode"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.14:1111" />
+	</bean>
+	<bean id="label-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="label" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/" />
+				<property name="poldName" value="http://www.w3.org/2000/01/rdf-schema#label"/>
+				<property name="pnewName" value="http://www.w3.org/2000/01/rdf-schema#label"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="symbol-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="symbol" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/" />
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/symbol"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/symbol"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="sysname-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="sysname" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/" />
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/sysname"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/sysname"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="class-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="class" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			   <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/class"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/class"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="xReaction-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="xReaction" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/xReaction"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/xReaction"/>
+				<property name="otrim" value="http://gcm.wfcc.info/keggreaction/"/>
+				<property name="oprefix" value="http://gcm.wfcc.info/reaction/"/>
+				
+			</bean>
+		</property>
+	</bean>
+	<bean id="substrate-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="substrate" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/substrate"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/substrate"/>
+				<property name="otrim" value="http://gcm.wfcc.info/keggcompound/"/>
+				<property name="oprefix" value="http://gcm.wfcc.info/compound/"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="product-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="product" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/product"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/xProductCompound"/>
+				<property name="otrim" value="http://gcm.wfcc.info/keggcompound/"/>
+				<property name="oprefix" value="http://gcm.wfcc.info/compound/"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="comment-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="comment" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/comment"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/comment"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="history-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="history" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/history"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/history"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="xKeggGene-mode" class="cn.cnic.viro.test.Mode">
+		<property name="matchRule">
+			<bean class="cn.cnic.viro.test.MatchRule">
+				<property name="pname" value="xKeggGene" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.viro.test.ModifyData">
+			    <property name="subjectoldPrefix" value="http://gcm.wfcc.info/keggenzyme/"/>
+				<property name="subjectnewPrefix" value="http://gcm.wfcc.info/enzyme/"/>
+				<property name="poldName" value="http://gcm.wdcm.org/gcm/xKeggGene"/>
+				<property name="pnewName" value="http://gcm.wdcm.org/gcm/xKeggGene"/>
+			</bean>
+		</property>
+	</bean>
+</beans>
