@@ -3,7 +3,9 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
-
+    <bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
 	<bean id="step" class="cn.cnic.virostudio.job.Step">
 	    <property name="prestep" ref="prestep"></property>
 		<property name="dataReader" ref="datareader" />
