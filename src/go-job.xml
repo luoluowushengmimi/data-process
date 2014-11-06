@@ -22,7 +22,7 @@
 			value=" select ?goId ?goName ?goNameSpace ?comment ?definition ?synonymvalue" />
 		<property name="whereClause"
 		  value="where{?s &lt;http://bds.csdb.cn/material/go/goId> ?goId. ?s &lt;http://bds.csdb.cn/material/go/goName> ?goName. ?s &lt;http://bds.csdb.cn/material/go/goNameSpace> ?goNameSpace. optional{?s &lt;http://bds.csdb.cn/material/go/comment> ?comment.}
-optional{?s &lt;http://bds.csdb.cn/material/go/defination> ?defination.  ?s &lt;http://bds.csdb.cn/material/go/synonym> ?synonym. ?synonym &lt;http://bds.csdb.cn/material/go/synonym> ?synonymvalue.}}"/>
+optional{?s &lt;http://bds.csdb.cn/material/go/defination> ?definition.   ?s &lt;http://bds.csdb.cn/material/go/synonym> ?synonym. ?synonym &lt;http://bds.csdb.cn/material/go/synonym> ?synonymvalue.}}"/>
 	</bean>
 	<bean id="source" class="java.lang.String">
 		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
