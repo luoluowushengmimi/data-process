@@ -25,7 +25,7 @@
 
 
 	<bean id="source" class="java.lang.String">
-		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/gene/" />

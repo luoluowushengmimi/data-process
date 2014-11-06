@@ -21,13 +21,10 @@
 			value="SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType " />
 		<property name="whereClause"
 			value="where {?s &lt;http://bds.csdb.cn/material/gene/geneId> ?geneId. ?s &lt;http://bds.csdb.cn/material/gene/taxonSource> ?taxonSource. ?s &lt;http://bds.csdb.cn/material/gene/symbol> ?symbol. ?s &lt;http://bds.csdb.cn/material/gene/description> ?description.?s &lt;http://bds.csdb.cn/material/gene/geneType> ?geneType.} " />
-		<property name="limit" value="10000" />
-		<property name="offset" value="0" />
 	</bean>
 
-
 	<bean id="source" class="java.lang.String">
-		<constructor-arg value="jdbc:virtuoso://192.168.94.50:1111" />
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/gene/" />
