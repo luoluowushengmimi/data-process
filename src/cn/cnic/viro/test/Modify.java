@@ -125,6 +125,7 @@ public class Modify {
 		}
 		else{
 			offset=offset+limit;
+			break;
 		}
 		}
 	}
@@ -256,7 +257,7 @@ public class Modify {
 		//ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 				//new String[] { "genome-modify-job.xml" });
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[] { "modify-enzyme-job.xml" });
+				new String[] { "modify-gene-job.xml" });
 		Modify modify = context.getBean("modify", Modify.class);
 		modify.doListener();
 		context.close();
