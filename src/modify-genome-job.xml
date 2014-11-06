@@ -8,7 +8,7 @@
 		<property name="dataBase" value="http://gcm.wfcc.info/"></property>
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
-		<property name="limit" value="500"></property>
+		<property name="limit" value="50"></property>
 		<property name="offset" value="0"></property>
 		<property name="selectClause"
 			value="select ?s ?organism ?bioproject ?tostrain" />

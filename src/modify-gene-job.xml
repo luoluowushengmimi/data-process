@@ -11,8 +11,8 @@
 		<property name="selectClause"
 			value="select ?s ?belongto ?geneend  ?geneorient ?genestart ?locustag ?genetype" />
 		<property name="whereClause"
-		   value="WHERE{ ?s &lt;http://gcm.wdcm.org/gcm/belongto> ?belongto. ?s &lt;http://gcm.wdcm.org/gcm/geneend> ?geneend .?s &lt;http://gcm.wdcm.org/gcm/geneorient> ?geneorient. ?s &lt;http://gcm.wdcm.org/gcm/genestart> ?genestart. ?s &lt;http://gcm.wdcm.org/gcm/locustag> ?locustag. ?s &lt;http://gcm.wdcm.org/gcm/genetype> ?genetype. ?s &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type. filter( ?type=&lt;http://gcm.wfcc.info/type/gene>)}"/>
-		<property name="limit" value="5"></property>
+		  value="WHERE{ optional{?s &lt;http://gcm.wdcm.org/gcm/belongto> ?belongto.} optional{?s &lt;http://gcm.wdcm.org/gcm/geneend> ?geneend .} optional{?s &lt;http://gcm.wdcm.org/gcm/geneorient> ?geneorient.} optional{?s &lt;http://gcm.wdcm.org/gcm/genestart> ?genestart.} optional{?s &lt;http://gcm.wdcm.org/gcm/locustag> ?locustag.}  optional{?s &lt;http://gcm.wdcm.org/gcm/genetype> ?genetype.} ?s &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type. filter( ?type=&lt;http://gcm.wfcc.info/type/gene>)}"></property>
+		<property name="limit" value="1"></property>
 		<property name="offset" value="0"></property>
 		<property name="modes">
 			<list>
