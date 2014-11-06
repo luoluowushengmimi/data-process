@@ -8,9 +8,27 @@
 		<property name="step" ref="step" />
 	</bean>
 	<bean id="step" class="cn.cnic.virostudio.job.Step">
+	    <property name="prestep" ref="prestep"></property>
 		<property name="dataReader" ref="datareader" />
 		<property name="processor" ref="main-processor" />
 		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="prestep" class="cn.cnic.virostudio.job.PreStep">
+		<property name="dataReader" ref="predatareader" />
+		<property name="dataWriter" ref="predatawriter" />
+	</bean>
+	<bean id="predatareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+	  <property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="SELECT distinct ?s" />
+		<property name="whereClause"
+		  value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName.}"/>
+	</bean>
+	<bean id="predatawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/enzyme/subjectlists" />
 	</bean>
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
@@ -18,11 +36,9 @@
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
-			value="SELECT distinct ?enzymeId ?enzymeName ?sysname ?class ?reactionSource ?substrate ?product ?comment ?history  ?keggGeneStdId" />
+			value="SELECT distinct ?enzymeId ?enzymeName ?ysname ?class ?reactionSource ?bstrate ?product ?comment ?history  ?keggGeneStdId" />
 		<property name="whereClause"
-			value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. optional{?s &lt;http://bds.csdb.cn/material/kegg/sysname> ?sysname.} optional{?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/substrate> ?substrate.} optional{?s &lt;http://bds.csdb.cn/material/kegg/product> ?product.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.} optional{?s &lt;http://bds.csdb.cn/material/kegg/history> ?history.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.} optional{?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}" />
-		<property name="limit" value="500000"></property>
-		<property name="offset" value="82189199"></property>			
+			value="where {?s &lt;http://bds.csdb.cn/material/kegg/enzymeId> ?enzymeId. ?s &lt;http://bds.csdb.cn/material/kegg/enzymeName> ?enzymeName. optional{?s &lt;http://bds.csdb.cn/material/kegg/sysname> ?ysname.} optional{?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.} optional{?s &lt;http://bds.csdb.cn/material/kegg/reactionSource> ?reactionSource.} optional{?s &lt;http://bds.csdb.cn/material/kegg/substrate> ?bstrate.} optional{?s &lt;http://bds.csdb.cn/material/kegg/product> ?product.} optional{?s &lt;http://bds.csdb.cn/material/kegg/comment> ?comment.} optional{?s &lt;http://bds.csdb.cn/material/kegg/history> ?history.} optional{?s &lt;http://bds.csdb.cn/material/kegg/keggGeneSource> ?keggGeneSource.} optional{?keggGeneSource &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}}" />
 	</bean>
 
 
@@ -64,10 +80,10 @@
 			<list>
 				<ref bean="enzymeId-processor" />
 				<ref bean="enzymeName-processor" />
-				<ref bean="sysname-processor" />
+				<ref bean="ysname-processor" />
 				<ref bean="class-processor" />
 				<ref bean="reactionSource-processor" />
-				<ref bean="substrate-processor" />
+				<ref bean="bstrate-processor" />
 				<ref bean="product-processor" />
 				<ref bean="comment-processor" />
 				<ref bean="history-processor" />
@@ -112,10 +128,10 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="sysname-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+	<bean id="ysname-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
-				<property name="pname" value="sysname" />
+				<property name="pname" value="ysname" />
 			</bean>
 		</property>
 		<property name="change">
@@ -151,10 +167,10 @@
 			</bean>
 		</property>
 	</bean>
-	<bean id="substrate-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+	<bean id="bstrate-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 				<bean class="cn.cnic.virostudio.rule.MatchRule">
-					<property name="pname" value="substrate" />
+					<property name="pname" value="bstrate" />
 				</bean>
 		</property>
 		<property name="change">
