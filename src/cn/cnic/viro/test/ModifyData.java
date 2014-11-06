@@ -3,6 +3,8 @@ package cn.cnic.viro.test;
 public class ModifyData {
 	private String poldName="";
 	public String pnewName = "";
+	private String subjectoldPrefix="";
+	private String subjectnewPrefix="";
 	public String oprefix = "";
 	public String otrim="";
 
@@ -39,6 +41,22 @@ public class ModifyData {
 
 	public void setPoldName(String poldName) {
 		this.poldName = poldName;
+	}
+
+	public String getSubjectoldPrefix() {
+		return subjectoldPrefix;
+	}
+
+	public void setSubjectoldPrefix(String subjectoldPrefix) {
+		this.subjectoldPrefix = subjectoldPrefix;
+	}
+
+	public String getSubjectnewPrefix() {
+		return subjectnewPrefix;
+	}
+
+	public void setSubjectnewPrefix(String subjectnewPrefix) {
+		this.subjectnewPrefix = subjectnewPrefix;
 	}
 	
 	
