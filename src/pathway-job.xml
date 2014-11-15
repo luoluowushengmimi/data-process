@@ -25,7 +25,7 @@
 			value="SELECT distinct ?s" />
 		<property name="whereClause"
 		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.}"/>
-	</bean>
+   </bean>
 	<bean id="predatawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
 		<property name="filePath" value="D:/pathway/subjectlists" />
 	</bean>
