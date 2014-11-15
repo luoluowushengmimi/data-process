@@ -69,7 +69,7 @@ WHERE  { ?s taxon:taxid  "1" ;?p ?o}
  optional{?location <http://bds.csdb.cn/material/genbank/seqMin> ?seqMin.}
  optional{?location <http://bds.csdb.cn/material/genbank/locationTxt> ?locationTxt.}
 }
-
+32736966
 第二个query：
 
 SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType 
@@ -79,6 +79,10 @@ SELECT distinct ?geneId ?taxonSource ?symbol ?description ?geneType
  ?s <http://bds.csdb.cn/material/gene/description> ?description.
  ?s <http://bds.csdb.cn/material/gene/geneType> ?geneType.
 } limit 10000 offset 0
+
+第三个query 是做一张让gene和kegggene的关系表
+select distinct ?ncbiGeneSource ?keggGeneStdId 
+where{?s <http://bds.csdb.cn/material/kegg/ncbiGeneSource> ?ncbiGeneSource. ?s <http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId .}
 
 这个有9941830条数据
 
@@ -258,4 +262,49 @@ WHERE  { ?s uniprot:uniprotId "Q465P7_METBF" ;?p ?o}
 }
 
 50359994
+
+go 数据
+select ?goId ?goName ?goNameSpace ?comment ?defination  ?synonymvalue
+where{?s <http://bds.csdb.cn/material/go/goId> ?goId. ?s <http://bds.csdb.cn/material/go/goName> ?goName. ?s <http://bds.csdb.cn/material/go/goNameSpace> ?goNameSpace. optional{?s <http://bds.csdb.cn/material/go/comment> ?comment.}
+optional{?s <http://bds.csdb.cn/material/go/defination> ?defination.  ?s <http://bds.csdb.cn/material/go/synonym> ?synonym. ?synonym <http://bds.csdb.cn/material/go/synonym> ?synonymvalue.}}
 cd /usr/lib/node_modules/mongo-express
+
+
+修改enzyme的查询语句
+
+select ?s ?label ?symbol ?sysname ?class ?xReaction ?substrate ?product ?comment ?history  ?xKeggGene 
+where{
+?s <http://www.w3.org/2000/01/rdf-schema#label> ?label.
+?s <http://gcm.wdcm.org/gcm/symbol> ?symbol.
+optional{?s <http://gcm.wdcm.org/gcm/sysname> ?sysname.}
+optional{?s <http://gcm.wdcm.org/gcm/class> ?class.}
+optional{?s <http://gcm.wdcm.org/gcm/xReaction> ?xReaction.}
+optional{?s <http://gcm.wdcm.org/gcm/substrate> ?substrate.}
+optional{?s <http://gcm.wdcm.org/gcm/product> ?product.}
+optional{?s <http://gcm.wdcm.org/gcm/comment> ?comment.}
+optional{?s <http://gcm.wdcm.org/gcm/history> ?history.}
+optional{?s <http://gcm.wdcm.org/gcm/xKeggGene> ?xKeggGene.}
+?s <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ?type. filter( ?type=<http://gcm.wfcc.info/type/keggenzyme>)
+} 
+
+pfam
+
+select ?s ?pfamId ?definition where{?s <http://bds.csdb.cn/material/pfam/pfamId> ?pfamId. ?s <http://bds.csdb.cn/material/pfam/definition> ?definition.}
+
+compound 数据处理配置修改完成 compound 数据处理完毕
+taxonomy 对的不需要修改。
+glycan 数据处理配置修改完毕                   数据完毕
+go数据配置完毕                                数据处理完毕
+pdb数据配置完毕                               数据处理完毕
+reaction 数据配置完毕     数据处理完毕
+genome 数据处理配置修改完毕 数据修改配置完毕 数据处理完毕
+uniprot  数据处理配置完毕  数据处理正在进行中
+gene 数据需要重新处理
+
+enzyme 数据处理配置修改完毕  数据修改配置完成 enzyme数据修改尚未开始
+
+pathway 数据处理配置完毕，数据处理尚未开始 看了一下数据量比较大，所以决定用数据修改方案。
+
+
+
+ 
