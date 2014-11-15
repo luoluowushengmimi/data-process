@@ -16,11 +16,6 @@ public class StartPathway {
 	public static void main(String[] args) throws Exception {
 //		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
 //				new String[] { "pathway-job.xml" });
-//		JobController job = context.getBean("job", JobController.class);
-//		job.doListener();
-//		context.close();
-//		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-//				new String[] { "pathway-job.xml" });
 //		Step step = context.getBean("step", Step.class);
 //		loginfo.info("pathway总条数是： "+step.doStep(0));
 //		context.close();
