@@ -12,6 +12,12 @@
 		<property name="processor" ref="main-processor" />
 		<property name="dataWriter" ref="datawriter" />
 	</bean>
+	<bean id="restep" class="cn.cnic.virostudio.job.ReStep">
+	    <property name="prestep" ref="prestep"></property>
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
 	<bean id="prestep" class="cn.cnic.virostudio.job.PreStep">
 		<property name="dataReader" ref="predatareader" />
 		<property name="dataWriter" ref="predatawriter" />
