@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="job" class="cn.cnic.virostudio.job.JobController">
+		<property name="step" ref="step" />
+	</bean>
+	<bean id="step" class="cn.cnic.virostudio.job.Step">
+		<property name="dataReader" ref="datareader" />
+		<property name="processor" ref="main-processor" />
+		<property name="dataWriter" ref="datawriter" />
+	</bean>
+	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
+		<property name="dataSource" ref="source" />
+		<property name="dataBase" value="material"></property>
+		<property name="userName" value="dba"></property>
+		<property name="passWord" value="dba"></property>
+		<property name="selectClause"
+			value="select distinct ?ncbiGeneSource ?keggGeneStdId" />
+		<property name="whereClause"
+           value="where{?s &lt;http://bds.csdb.cn/material/kegg/ncbiGeneSource> ?ncbiGeneSource. ?s &lt;http://bds.csdb.cn/material/kegg/keggGeneStdId> ?keggGeneStdId.}"></property>	
+    </bean>
+	<bean id="source" class="java.lang.String">
+		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
+	</bean>
+	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
+		<property name="filePath" value="D:/gene/" />
+		<property name="sprefix" value="http://gcm.wfcc.info/gene/" />
+		<property name="idname" value="subject" />
+		<property name="ignorekey" value="subject"></property>
+		<property name="namespace">
+			<map>
+				<entry key="dc">
+					<value>http://purl.org/dc/elements/1.1/</value>
+				</entry>
+				<entry key="rdf">
+					<value>http://www.w3.org/1999/02/22-rdf-syntax-ns#</value>
+				</entry>
+				<entry key="rdfs">
+					<value>http://www.w3.org/2000/01/rdf-schema#</value>
+				</entry>
+				<entry key="gcm">
+					<value>http://gcm.wdcm.org/gcm/</value>
+				</entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="main-processor" class="cn.cnic.virostudio.process.CompositeProcessor">
+		<property name="preProcessor">
+			<bean class="cn.cnic.virostudio.process.PreProcessor">
+				<property name="conditions">
+					<list>
+					</list>
+				</property>
+			</bean>
+		</property>
+
+		<property name="processors">
+			<list>
+				<ref bean="ncbiGeneSource-processor" />
+				<ref bean="keggGeneStdId-processor"/>
+			</list>
+		</property>
+
+		<property name="postProcessor">
+			<bean class="cn.cnic.virostudio.process.PostProcessor">
+				<property name="removeKeys">
+					<list>
+					 <value></value>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="ncbiGeneSource-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="ncbiGeneSource" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="subject" />
+				<property name="otrim" value="http://bds.csdb.cn/material/gene/"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="keggGeneStdId-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="keggGeneStdId" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="gcm:xKeggGene" />
+				<property name="oprefix" value="http://gcm.wfcc.info/kegggene/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
+</beans>
