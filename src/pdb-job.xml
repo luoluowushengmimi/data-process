@@ -110,6 +110,7 @@
 				<property name="pnewName" value="GCM:organism" />
 				<property name="otrim" value="http://bds.csdb.cn/material/taxonomy/"></property>
 				<property name="oprefix" value="http://gcm.wfcc.info/taxonomy/"></property>
+				<property name="otype" value="uri" />
 			</bean>
 		</property>
 	</bean>
@@ -123,6 +124,7 @@
 			<bean class="cn.cnic.virostudio.rule.ModifyData">
 				<property name="pnewName" value="GCM:xProteinAcc" />
 				<property name="oprefix" value="http://gcm.wfcc.info/protien/accnum/" />
+				<property name="otype" value="uri" />
 			</bean>
 		</property>
 	</bean>
