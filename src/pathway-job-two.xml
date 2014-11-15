@@ -7,27 +7,9 @@
 		<property name="step" ref="step" />
 	</bean>
 	<bean id="step" class="cn.cnic.virostudio.job.Step">
-	    <property name="prestep" ref="prestep"></property>
 		<property name="dataReader" ref="datareader" />
 		<property name="processor" ref="main-processor" />
 		<property name="dataWriter" ref="datawriter" />
-	</bean>
-	<bean id="prestep" class="cn.cnic.virostudio.job.PreStep">
-		<property name="dataReader" ref="predatareader" />
-		<property name="dataWriter" ref="predatawriter" />
-	</bean>
-	<bean id="predatareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
-	  <property name="dataSource" ref="source" />
-		<property name="dataBase" value="material"></property>
-		<property name="userName" value="dba"></property>
-		<property name="passWord" value="dba"></property>
-		<property name="selectClause"
-			value="SELECT distinct ?s" />
-		<property name="whereClause"
-		  value="where { ?s &lt;http://bds.csdb.cn/material/kegg/pathwayId> ?pathwayId. ?s &lt;http://bds.csdb.cn/material/kegg/pathwayName> ?pathwayName. ?s &lt;http://bds.csdb.cn/material/kegg/class> ?class.}"/>
-	</bean>
-	<bean id="predatawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
-		<property name="filePath" value="D:/pathway/subjectlists" />
 	</bean>
 	<bean id="datareader" class="cn.cnic.virostudio.step.DataReaderByVituoso">
 		<property name="dataSource" ref="source" />
@@ -35,7 +17,7 @@
 		<property name="userName" value="dba"></property>
 		<property name="passWord" value="dba"></property>
 		<property name="selectClause"
-			value="SELECT  distinct ?s ?organismGn ?taxid ?xref" />
+			value="SELECT distinct ?s ?taxid" />
 		<property name="whereClause"
 		  value="WHERE {{?s &lt;http://bds.csdb.cn/material/kegg/organismGn> ?organismGn }UNION{ ?xref  &lt;http://bds.csdb.cn/material/dbClass>  'keggpathwayXTaxon' . ?xref &lt;http://bds.csdb.cn/material/kegg/organismGn>  ?organismGn} ?xref  &lt;http://bds.csdb.cn/material/kegg/taxid> ?taxid.}"/>
 	</bean>
@@ -45,9 +27,10 @@
 		<constructor-arg value="jdbc:virtuoso://10.0.10.12:1111" />
 	</bean>
 	<bean id="datawriter" class="cn.cnic.virostudio.step.DataWriterToFile">
-		<property name="filePath" value="D:/pathway2/" />
-		<property name="idname" value="s" />
-		<property name="ignorekey" value="s"></property>
+		<property name="filePath" value="D:/pathway/" />
+		<property name="sprefix" value="" />
+		<property name="idname" value="subject" />
+		<property name="ignorekey" value="subject"></property>
 		<property name="namespace">
 			<map>
 				<entry key="dc">
@@ -77,6 +60,7 @@
 
 		<property name="processors">
 			<list>
+			    <ref bean="s-processor" />
 				<ref bean="taxid-processor" />
 			</list>
 		</property>
@@ -85,14 +69,26 @@
 			<bean class="cn.cnic.virostudio.process.PostProcessor">
 			  <property name="removeKeys">
 			    <list>
-			     <value>organismGn</value>
-			      <value>xref</value>
 			    </list>
 			  </property>
 			</bean>
 		</property>
 	</bean>
-
+     <bean id="s-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
+		<property name="matchRule">
+			<bean class="cn.cnic.virostudio.rule.MatchRule">
+				<property name="pname" value="s" />
+			</bean>
+		</property>
+		<property name="change">
+			<bean class="cn.cnic.virostudio.rule.ModifyData">
+				<property name="pnewName" value="subject" />
+				<property name="otrim" value="http://bds.csdb.cn/material/kegg/pathway/"></property>
+				<property name="oprefix" value="http://gcm.wfcc.info/keggpathway/"></property>
+				<property name="otype" value="uri"></property>
+			</bean>
+		</property>
+	</bean>
 	<bean id="taxid-processor" class="cn.cnic.virostudio.process.PropertyRenameProcessor">
 		<property name="matchRule">
 			<bean class="cn.cnic.virostudio.rule.MatchRule">
@@ -107,4 +103,5 @@
 			</bean>
 		</property>
 	</bean>
+	
 </beans>
