@@ -1,6 +1,7 @@
 package cn.cnic.virostudio.job;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -70,7 +71,7 @@ public class PreStep {
 
 
 
-	public  void doPreStep() throws Exception{
+	public  void doPreStep2() throws Exception{
 		ArrayList<Multimap<String, String>> maps=this.getPrequery();
 		for(Multimap<String, String> map:maps){
 			//loginfo.info("主语是： "+map.get("s"));
@@ -79,6 +80,40 @@ public class PreStep {
 			 //loginfo.info("doprestep:"+query);
 			 FileUtils.write(new File(dataWriter.getFilePath()), s+"\r\n", true);
 		}
+		
+	}
+	
+	public void doPreStep() throws IOException{
+		long count = 0;
+		
+		VirtGraph set = new VirtGraph (dataReader.getDataSource(), dataReader.getUserName(), dataReader.getPassWord());
+		String query=dataReader.getSelectClause()+" from "+"<"+dataReader.getDataBase()+">"+" "+dataReader.getWhereClause();
+		loginfo.info("prequery:"+query);
+		Query sparql = QueryFactory.create(query);
+		VirtuosoQueryExecution vqe = VirtuosoQueryExecutionFactory.create (sparql, set);
+		ResultSet results = vqe.execSelect();
+		//loginfo.info("测试应该是读取成功");
+		while (results.hasNext()) {
+			loginfo.info("prequery 程序跑到第"+count+"个");
+			count++;
+			QuerySolution result = results.nextSolution();
+			Iterator<String> iter=result.varNames();
+			while(iter.hasNext()){
+				String name=iter.next();
+				RDFNode node=result.get(name);
+				String nodevalue=node.toString();
+				if(nodevalue.endsWith(",")||nodevalue.endsWith(" ")||nodevalue.endsWith("|")){
+					nodevalue=nodevalue.substring(0, nodevalue.length()-1);
+				}
+				//loginfo.info("premap "+" name: " +name+" nodevalue: "+nodevalue);
+				 String s=nodevalue.toString().replaceAll("\\[", "<").replaceAll("\\]", ">");
+				 FileUtils.write(new File(dataWriter.getFilePath()), s+"\r\n", true);
+			}
+			
+			
+		}
+		vqe.close();
+		set.close();
 		
 	}
 	
