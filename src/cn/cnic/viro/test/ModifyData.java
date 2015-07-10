@@ -59,5 +59,4 @@ public class ModifyData {
 		this.subjectnewPrefix = subjectnewPrefix;
 	}
 	
-	
 }
