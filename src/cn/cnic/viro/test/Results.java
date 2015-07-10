@@ -55,7 +55,4 @@ public List<Triple> getOlds() {
 public List<Triple> getNews() {
 	return news;
 }
-
-  
-  
 }
